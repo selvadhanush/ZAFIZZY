@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
 /**
- * Creates an ultra-crisp high-resolution 2048x2048 metallic platinum/silver plaque
- * for the ZÄFIZZY flacon face.
+ * Creates an ultra-crisp 2048x2048 transparent silkscreen brand mark
+ * matching the authentic luxury flacon (no fake plaque boxes or borders).
  */
 export function createBottleBrandTexture() {
   const canvas = document.createElement('canvas');
@@ -12,98 +12,25 @@ export function createBottleBrandTexture() {
 
   if (!ctx) return null;
 
+  // Pure transparent background
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const plaqueW = 1380;
-  const plaqueH = 1000;
-  const plaqueX = (canvas.width - plaqueW) / 2;
-  const plaqueY = (canvas.height - plaqueH) / 2;
-
-  // 1. Plaque background: Semi-translucent deep glass frosted backing
+  // Pure white/silver silkscreened wordmark with subtle dimensional shadow
   ctx.save();
-  ctx.fillStyle = 'rgba(16, 30, 56, 0.45)';
-  ctx.beginPath();
-  ctx.roundRect(plaqueX, plaqueY, plaqueW, plaqueH, 24);
-  ctx.fill();
-
-  // 2. Beveled platinum border
-  ctx.strokeStyle = '#E2E8F0';
-  ctx.lineWidth = 6;
-  ctx.stroke();
-
-  // 3. Inner fine hairline border
-  ctx.strokeStyle = 'rgba(216, 223, 233, 0.6)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.roundRect(plaqueX + 24, plaqueY + 24, plaqueW - 48, plaqueH - 48, 16);
-  ctx.stroke();
-
-  // 4. Diamond-Star Monogram
-  const drawDiamondStar = (cx, cy, spikes, outerRadius, innerRadius) => {
-    let rot = (Math.PI / 2) * 3;
-    let x = cx;
-    let y = cy;
-    const step = Math.PI / spikes;
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - outerRadius);
-    for (let i = 0; i < spikes; i++) {
-      x = cx + Math.cos(rot) * outerRadius;
-      y = cy + Math.sin(rot) * outerRadius;
-      ctx.lineTo(x, y);
-      rot += step;
-
-      x = cx + Math.cos(rot) * innerRadius;
-      y = cy + Math.sin(rot) * innerRadius;
-      ctx.lineTo(x, y);
-      rot += step;
-    }
-    ctx.lineTo(cx, cy - outerRadius);
-    ctx.closePath();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fill();
-  };
-
-  drawDiamondStar(canvas.width / 2, plaqueY + 160, 4, 48, 14);
-
-  // 5. Arabic Calligraphy: زافيزي
-  ctx.fillStyle = '#FAF9F6';
-  ctx.font = '300 76px "Cormorant Garamond", serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('زافيزي', canvas.width / 2, plaqueY + 280);
 
-  // 6. Brand Wordmark: ZÄFIZZY
+  // Subtle soft ambient shadow for laser-sharp readability over refracting liquid
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 2;
+
+  // Primary Luxury Wordmark: ZÄFIZZY
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '600 136px "Cormorant Garamond", serif';
-  ctx.letterSpacing = '18px';
-  ctx.fillText('ZÄFIZZY', canvas.width / 2, plaqueY + 450);
-
-  // 7. Hairline Accent Line
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(plaqueX + 220, plaqueY + 560);
-  ctx.lineTo(plaqueX + plaqueW - 220, plaqueY + 560);
-  ctx.stroke();
-
-  // 8. Subtitle: PERFUMERS & PERFUMERY
-  ctx.fillStyle = '#E2E8F0';
-  ctx.font = '500 42px "Plus Jakarta Sans", sans-serif';
-  ctx.letterSpacing = '24px';
-  ctx.fillText('PERFUMERS & PERFUMERY', canvas.width / 2, plaqueY + 650);
-
-  // 9. Tagline: ACQUIRE THE WORLD
-  ctx.fillStyle = '#CBD5E1';
-  ctx.font = '400 32px "Plus Jakarta Sans", sans-serif';
-  ctx.letterSpacing = '32px';
-  ctx.fillText('ACQUIRE THE WORLD', canvas.width / 2, plaqueY + 740);
-
-  // 10. Edition Spec
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '400 24px monospace';
-  ctx.letterSpacing = '8px';
-  ctx.fillText('EXTRAIT DE PARFUM  100 ML — 3.4 FL. OZ.', canvas.width / 2, plaqueY + 840);
+  ctx.font = '500 132px "Cormorant Garamond", "Cinzel", Georgia, serif';
+  ctx.letterSpacing = '16px';
+  ctx.fillText('ZÄFIZZY', canvas.width / 2, canvas.height / 2 + 80);
 
   ctx.restore();
 
@@ -111,6 +38,70 @@ export function createBottleBrandTexture() {
   texture.needsUpdate = true;
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
+  return texture;
+}
+
+/**
+ * Creates authentic luminous liquid gradient texture matching signature-bottle.jpg
+ * (Deep midnight navy at top transitioning to glowing sapphire at bottom)
+ */
+export function createLiquidGradientTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0.0, '#051124');   // Deepest midnight navy meniscus
+  grad.addColorStop(0.35, '#0a1e3f');  // Saturated royal midnight
+  grad.addColorStop(0.70, '#0f2d5c');  // Vibrant oceanic sapphire
+  grad.addColorStop(0.88, '#16407a');  // Luminous sapphire refraction
+  grad.addColorStop(1.0, '#1c4f8e');   // Radiant bottom curve highlight
+
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+/**
+ * Creates fine brushed metallic anisotropic grain texture for the luxury cap
+ */
+export function createBrushedMetalTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  // Base metal tone
+  ctx.fillStyle = '#141d2f';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Micro-fine vertical brushed lines
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+  for (let i = 0; i < 400; i++) {
+    const x = Math.random() * canvas.width;
+    const w = 1 + Math.random() * 2;
+    ctx.fillRect(x, 0, w, canvas.height);
+  }
+
+  // Subtle darker grain
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+  for (let i = 0; i < 400; i++) {
+    const x = Math.random() * canvas.width;
+    const w = 1 + Math.random() * 2;
+    ctx.fillRect(x, 0, w, canvas.height);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(4, 1);
+  texture.needsUpdate = true;
   return texture;
 }
 

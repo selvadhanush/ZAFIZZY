@@ -69,60 +69,35 @@ function BottleScene({ scrollProgressRef, pointerOffset, isDarkTheme, isMobile }
       targetPosY = -0.05;
     }
 
-    // Apply scroll-driven rotation to Outer Group (deterministic)
+    // Apply scroll-driven rotation & position to Outer Group (instant, zero double-lag)
     if (outerGroupRef.current) {
-      outerGroupRef.current.rotation.y = THREE.MathUtils.damp(
-        outerGroupRef.current.rotation.y,
-        targetRotY,
-        8,
-        state.clock.getDelta()
-      );
-      outerGroupRef.current.position.y = THREE.MathUtils.damp(
-        outerGroupRef.current.position.y,
-        targetPosY,
-        6,
-        state.clock.getDelta()
-      );
+      outerGroupRef.current.rotation.y = targetRotY;
+      outerGroupRef.current.position.y = targetPosY;
     }
 
     // Apply additive desktop pointer tilt to Inner Group (never overwrites scroll rotation)
     if (tiltGroupRef.current && !isMobile) {
-      const maxTiltX = 0.10;
-      const maxTiltZ = 0.12;
+      const maxTiltX = 0.08;
+      const maxTiltZ = 0.10;
       const desiredTiltX = -pointerOffset.y * maxTiltX;
       const desiredTiltZ = -pointerOffset.x * maxTiltZ;
 
       tiltGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         tiltGroupRef.current.rotation.x,
         desiredTiltX,
-        0.08
+        0.1
       );
       tiltGroupRef.current.rotation.z = THREE.MathUtils.lerp(
         tiltGroupRef.current.rotation.z,
         desiredTiltZ,
-        0.08
+        0.1
       );
     }
 
-    // Camera Dolly & Position Interpolation
-    state.camera.position.x = THREE.MathUtils.damp(
-      state.camera.position.x,
-      targetCamX,
-      5,
-      state.clock.getDelta()
-    );
-    state.camera.position.y = THREE.MathUtils.damp(
-      state.camera.position.y,
-      targetCamY,
-      5,
-      state.clock.getDelta()
-    );
-    state.camera.position.z = THREE.MathUtils.damp(
-      state.camera.position.z,
-      targetCamZ,
-      5,
-      state.clock.getDelta()
-    );
+    // Camera Dolly & Position (Smoothly following scrubbed targets)
+    state.camera.position.x = targetCamX;
+    state.camera.position.y = targetCamY;
+    state.camera.position.z = targetCamZ;
 
     cameraTargetRef.current.set(targetCamX * 0.25, targetPosY + 0.3, 0);
     state.camera.lookAt(cameraTargetRef.current);
@@ -148,7 +123,7 @@ function BottleScene({ scrollProgressRef, pointerOffset, isDarkTheme, isMobile }
 
         {/* Soft Studio Contact Shadow */}
         <ContactShadows
-          position={[0, -2.05, 0]}
+          position={[0, -2.22, 0]}
           opacity={isDarkTheme ? 0.6 : 0.45}
           scale={5.8}
           blur={2.2}
@@ -295,7 +270,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         {webglSupported ? (
           <div className="absolute inset-0 z-10 w-full h-full">
             <Canvas
-              shadows
+              dpr={[1, 1.5]}
               camera={{ position: [0, 0.4, 8.4], fov: 36 }}
               gl={{
                 antialias: true,

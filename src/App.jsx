@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
-import PerfumeExperience from './components/3d/PerfumeExperience';
 import BrandPhilosophy from './components/BrandPhilosophy';
 import SignatureFragrance from './components/SignatureFragrance';
 import FragranceWorld from './components/FragranceWorld';
 import ClosingBrandStatement from './components/ClosingBrandStatement';
-import ConciergeDrawer from './components/ConciergeDrawer';
-import BrandAuditModal from './components/BrandAuditModal';
+import { BRAND_IDENTITY } from './data/brandData';
+
+// Lazy-loaded 3D WebGL Canvas & Modals
+const PerfumeExperience = lazy(() => import('./components/3d/PerfumeExperience'));
+const ConciergeDrawer = lazy(() => import('./components/ConciergeDrawer'));
+const BrandAuditModal = lazy(() => import('./components/BrandAuditModal'));
 
 export default function App() {
   const [auditOpen, setAuditOpen] = useState(false);
@@ -34,10 +37,31 @@ export default function App() {
         
         {/* 1. Master Real-Time 3D Scroll-Driven Storytelling Experience */}
         <section id="experience">
-          <PerfumeExperience
-            onOpenAudit={() => setAuditOpen(true)}
-            onOpenConcierge={() => setConciergeOpen(true)}
-          />
+          <Suspense
+            fallback={
+              <div className="w-full h-screen flex flex-col items-center justify-center bg-white text-navy-900 p-8 text-center">
+                <div className="relative w-44 h-60 mb-6 flex items-center justify-center">
+                  <img
+                    src={BRAND_IDENTITY.assets.signatureBottle}
+                    alt="ZÄFIZZY Flacon"
+                    className="max-h-full max-w-full object-contain filter drop-shadow-xl animate-pulse"
+                  />
+                </div>
+                <div className="flex items-center gap-2 mb-2 text-xs font-mono uppercase tracking-widest text-navy-muted">
+                  <span className="w-2 h-2 rounded-full bg-navy-900 animate-ping" />
+                  <span>INITIALIZING 3D FLACON CHOREOGRAPHY...</span>
+                </div>
+                <p className="text-[11px] font-serif italic text-navy-muted/70">
+                  Haute Parfumerie Real-Time Ray Refraction
+                </p>
+              </div>
+            }
+          >
+            <PerfumeExperience
+              onOpenAudit={() => setAuditOpen(true)}
+              onOpenConcierge={() => setConciergeOpen(true)}
+            />
+          </Suspense>
         </section>
 
         {/* 2. Brand Philosophy Manifesto */}
@@ -56,17 +80,25 @@ export default function App() {
         onOpenConcierge={() => setConciergeOpen(true)}
       />
 
-      {/* Client Concierge & Inquiries Drawer */}
-      <ConciergeDrawer
-        isOpen={conciergeOpen}
-        onClose={() => setConciergeOpen(false)}
-      />
+      {/* Client Concierge & Inquiries Drawer (Lazy loaded on interaction) */}
+      {conciergeOpen && (
+        <Suspense fallback={null}>
+          <ConciergeDrawer
+            isOpen={conciergeOpen}
+            onClose={() => setConciergeOpen(false)}
+          />
+        </Suspense>
+      )}
 
-      {/* Art Direction & 3D Technical Audit Modal */}
-      <BrandAuditModal
-        isOpen={auditOpen}
-        onClose={() => setAuditOpen(false)}
-      />
+      {/* Art Direction & 3D Technical Audit Modal (Lazy loaded on interaction) */}
+      {auditOpen && (
+        <Suspense fallback={null}>
+          <BrandAuditModal
+            isOpen={auditOpen}
+            onClose={() => setAuditOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

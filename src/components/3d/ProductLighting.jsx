@@ -19,39 +19,36 @@ export default function ProductLighting({ isDarkTheme = false }) {
   return (
     <>
       {/* Ambient Base Light */}
-      <ambientLight intensity={isDarkTheme ? 0.35 : 0.55} color="#FAF9F6" />
+      <ambientLight intensity={isDarkTheme ? 0.4 : 0.6} color="#FAF9F6" />
 
-      {/* Main Studio Key Light (Front-Right Top) */}
+      {/* Right Studio Softbox Strip (Produces right vertical glass highlight) */}
       <directionalLight
-        position={[4.5, 6.0, 5.5]}
-        intensity={isDarkTheme ? 1.6 : 2.2}
+        position={[4.5, 4.5, 5.0]}
+        intensity={isDarkTheme ? 2.2 : 2.8}
         color="#FFFFFF"
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-bias={-0.0001}
       />
 
-      {/* High-Impact Glass Rim Light (Back-Right) */}
+      {/* Left Studio Softbox Strip (Produces left vertical glass highlight) */}
+      <directionalLight
+        position={[-4.5, 4.5, 5.0]}
+        intensity={isDarkTheme ? 1.8 : 2.4}
+        color="#F8FAFC"
+      />
+
+      {/* High-Impact Top/Rear Crystal Rim Light */}
       <directionalLight
         ref={rimLightRef}
-        position={[3.0, 4.5, -4.0]}
-        intensity={isDarkTheme ? 3.0 : 2.2}
+        position={[2.0, 5.5, -4.0]}
+        intensity={isDarkTheme ? 3.2 : 2.5}
         color="#E2E8F0"
       />
 
-      {/* Cool Mist-Blue Fill Light (Front-Left) */}
-      <directionalLight
-        position={[-4.5, 3.0, 4.0]}
-        intensity={isDarkTheme ? 0.7 : 0.9}
-        color="#D8DFE9"
-      />
-
-      {/* Plinth Bounce Light */}
+      {/* Plinth Marble Warm Bounce Light */}
       <pointLight
-        position={[0, -1.9, 1.8]}
-        intensity={0.6}
-        color="#FFFFFF"
-        distance={5}
+        position={[0, -1.8, 2.2]}
+        intensity={isDarkTheme ? 0.6 : 1.2}
+        color="#FFF9F0"
+        distance={6}
       />
     </>
   );

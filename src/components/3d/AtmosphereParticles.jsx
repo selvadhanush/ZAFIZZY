@@ -38,14 +38,9 @@ export default function AtmosphereParticles({ count = 40, isDarkTheme = false })
   useFrame((state) => {
     if (!pointsRef.current) return;
     const t = state.clock.getElapsedTime();
+    // Smooth, zero-overhead rotation and vertical wave drift
     pointsRef.current.rotation.y = t * 0.025;
-    const array = pointsRef.current.geometry.attributes.position.array;
-
-    for (let i = 0; i < count; i++) {
-      const yIdx = i * 3 + 1;
-      array[yIdx] += Math.sin(t * 0.4 + i) * 0.0015;
-    }
-    pointsRef.current.geometry.attributes.position.needsUpdate = true;
+    pointsRef.current.position.y = Math.sin(t * 0.25) * 0.06;
   });
 
   return (
