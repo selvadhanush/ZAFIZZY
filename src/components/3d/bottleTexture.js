@@ -28,9 +28,21 @@ export function createBottleBrandTexture() {
 
   // Primary Luxury Wordmark: ZÄFIZZY
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '500 132px "Cormorant Garamond", "Cinzel", Georgia, serif';
-  ctx.letterSpacing = '16px';
-  ctx.fillText('ZÄFIZZY', canvas.width / 2, canvas.height / 2 + 80);
+  ctx.font = '500 136px "Cormorant Garamond", "Cinzel", Georgia, serif';
+  ctx.letterSpacing = '18px';
+  ctx.fillText('ZÄFIZZY', canvas.width / 2, canvas.height / 2 + 45);
+
+  // Subtitle: PERFUMERS & PERFUMERY
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+  ctx.font = '400 32px "Plus Jakarta Sans", sans-serif';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('PERFUMERS & PERFUMERY', canvas.width / 2, canvas.height / 2 + 115);
+
+  // Volume & Concentration notation
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.60)';
+  ctx.font = '300 22px "Plus Jakarta Sans", monospace';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('EXTRAIT DE PARFUM  •  100 ML', canvas.width / 2, canvas.height / 2 + 165);
 
   ctx.restore();
 
@@ -42,8 +54,8 @@ export function createBottleBrandTexture() {
 }
 
 /**
- * Creates authentic luminous liquid gradient texture matching signature-bottle.jpg
- * (Deep midnight navy at top transitioning to glowing sapphire at bottom)
+ * Creates authentic luminous rich brown alcohol perfume liquid texture
+ * Aged bourbon, cognac, and warm amber-brown tones that mimic fine aged liquor
  */
 export function createLiquidGradientTexture() {
   const canvas = document.createElement('canvas');
@@ -52,14 +64,46 @@ export function createLiquidGradientTexture() {
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
+  // Vertical gradient with rich brown alcohol & aged bourbon tones
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0.0, '#051124');   // Deepest midnight navy meniscus
-  grad.addColorStop(0.35, '#0a1e3f');  // Saturated royal midnight
-  grad.addColorStop(0.70, '#0f2d5c');  // Vibrant oceanic sapphire
-  grad.addColorStop(0.88, '#16407a');  // Luminous sapphire refraction
-  grad.addColorStop(1.0, '#1c4f8e');   // Radiant bottom curve highlight
+  grad.addColorStop(0.0, '#260D04');   // Deep dark roasted mahogany meniscus line
+  grad.addColorStop(0.12, '#3E1707');  // Rich aged bourbon brown
+  grad.addColorStop(0.35, '#5A230A');  // Deep warm cognac brown alcohol
+  grad.addColorStop(0.60, '#7A320E');  // Luminous amber-brown alcohol body
+  grad.addColorStop(0.82, '#964012');  // Glowing warm amber heart
+  grad.addColorStop(1.0, '#582108');   // Deep bottom refraction warmth
 
   ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Subtle crystal facet refraction lines in warm amber
+  ctx.save();
+  ctx.strokeStyle = 'rgba(235, 155, 60, 0.18)';
+  ctx.lineWidth = 1.5;
+  const step = 64;
+  for (let y = canvas.height * 0.1; y < canvas.height; y += step) {
+    for (let x = 0; x < canvas.width + step; x += step) {
+      ctx.beginPath();
+      ctx.moveTo(x, y - step / 2);
+      ctx.lineTo(x + step / 2, y);
+      ctx.lineTo(x, y + step / 2);
+      ctx.lineTo(x - step / 2, y);
+      ctx.closePath();
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // Internal luminous cognac/bourbon amber radial warmth
+  const radial = ctx.createRadialGradient(
+    canvas.width / 2, canvas.height * 0.55, 25,
+    canvas.width / 2, canvas.height * 0.55, canvas.width * 0.6
+  );
+  radial.addColorStop(0.0, 'rgba(200, 90, 22, 0.45)'); // Glowing luminous amber core
+  radial.addColorStop(0.55, 'rgba(110, 42, 10, 0.28)'); // Rich cognac brown body
+  radial.addColorStop(1.0, 'rgba(38, 14, 4, 0.05)');   // Deep edge falloff
+
+  ctx.fillStyle = radial;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const texture = new THREE.CanvasTexture(canvas);

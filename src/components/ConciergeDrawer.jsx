@@ -30,23 +30,23 @@ export default function ConciergeDrawer({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg bg-white h-full shadow-2xl p-8 sm:p-10 flex flex-col justify-between overflow-y-auto"
+        className="w-full max-w-lg bg-white h-full shadow-2xl p-5 sm:p-8 md:p-10 flex flex-col justify-between overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-navy-900/10">
+          <div className="flex items-center justify-between pb-5 sm:pb-6 border-b border-navy-900/10">
             <div>
               <span className="text-[10px] font-mono tracking-widest uppercase text-navy-muted block">
                 ZÄFIZZY CONCIERGE
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl text-navy-900 font-light mt-1">
+              <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-navy-900 font-light mt-1">
                 Private Atelier Inquiry
               </h3>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-navy-900 hover:text-navy-muted transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-navy-900 hover:text-navy-muted transition-colors"
               aria-label="Close concierge"
             >
               <X className="w-5 h-5" />

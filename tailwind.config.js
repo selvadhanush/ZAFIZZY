@@ -12,7 +12,7 @@ export default {
           900: '#101E38', // Midnight navy primary
           800: '#182A4D',
           700: '#223864',
-          muted: '#5A6882', // Secondary text navy-gray
+          muted: '#435370', // High contrast secondary editorial text (WCAG AAA compliant on white)
           subtle: '#8B9BB4',
         },
         ivory: {
