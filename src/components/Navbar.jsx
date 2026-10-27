@@ -42,16 +42,21 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
-          {/* Brand Identity / Logo */}
+          {/* Brand Identity / Logo & Calligraphy */}
           <a
             href="#"
-            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-900"
+            className="flex flex-col items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-900"
             aria-label="ZÄFIZZY Home"
           >
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Perfumers & Perfumery"
-              className="h-9 sm:h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-8 sm:h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+            <img
+              src={BRAND_IDENTITY.assets.bismillah}
+              alt="Bismillah ir-Rahman ir-Rahim"
+              className="h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-opacity duration-300 group-hover:opacity-100"
             />
           </a>
 
@@ -119,11 +124,18 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
         >
           <div>
             <div className="flex items-center justify-between pb-6 border-b border-navy-900/10">
-              <img
-                src={BRAND_IDENTITY.assets.logo}
-                alt="ZÄFIZZY Logo"
-                className="h-9 w-auto object-contain"
-              />
+              <div className="flex flex-col items-start">
+                <img
+                  src={BRAND_IDENTITY.assets.logo}
+                  alt="ZÄFIZZY Logo"
+                  className="h-8 w-auto object-contain"
+                />
+                <img
+                  src={BRAND_IDENTITY.assets.bismillah}
+                  alt="Bismillah ir-Rahman ir-Rahim"
+                  className="h-2.5 w-auto object-contain mt-1 opacity-90"
+                />
+              </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 text-navy-900"
