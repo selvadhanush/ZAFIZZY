@@ -18,7 +18,9 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
     { label: "3D Experience", href: "#experience" },
     { label: "Philosophy", href: "#philosophy" },
     { label: "Flacon Dossier", href: "#signature" },
-    { label: "The World", href: "#world" },
+    { label: "Terroir", href: "#world" },
+    { label: "Reviews", href: "#reviews" },
+    { label: "Gazette", href: "#gazette" },
   ];
 
   const handleNavClick = (e, href) => {
@@ -39,7 +41,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
             : 'bg-transparent py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
           {/* Brand Identity / Logo */}
           <a
             href="#"
@@ -49,7 +51,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Perfumers & Perfumery"
-              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-9 sm:h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </a>
 
@@ -93,7 +95,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-navy-900 focus:outline-none"
+            className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-navy-900 focus:outline-none"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -110,7 +112,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
         onClick={() => setMobileMenuOpen(false)}
       >
         <div
-          className={`fixed top-0 right-0 w-4/5 max-w-sm h-full bg-white shadow-2xl p-8 flex flex-col justify-between transition-transform duration-300 ${
+          className={`fixed top-0 right-0 w-5/6 max-w-sm h-full bg-white shadow-2xl p-6 sm:p-8 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -124,7 +126,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
               />
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1 text-navy-900"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 text-navy-900"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />

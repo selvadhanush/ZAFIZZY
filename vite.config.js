@@ -9,6 +9,12 @@ export default defineConfig({
     host: true,
   },
   build: {
+    modulePreload: {
+      resolveDependencies: (filename, deps) => {
+        // Exclude heavy 3D vendor chunks from critical path head preloading
+        return deps.filter((dep) => !dep.includes('three-vendor'));
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: {

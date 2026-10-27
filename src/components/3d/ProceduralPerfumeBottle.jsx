@@ -2,32 +2,39 @@ import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import { RoundedBox } from '@react-three/drei';
 import {
-  createBottleBrandTexture,
   createLiquidGradientTexture,
   createBrushedMetalTexture,
 } from './bottleTexture';
+import { BRAND_IDENTITY } from '../../data/brandData';
 
 /**
- * Authentic Haute Parfumerie Flacon — Faithful to signature-bottle.jpg
+ * Authentic Haute Parfumerie Flacon — ZÄFIZZY
  * 
  * Key architectural elements:
- * 1. Crisp, precision-beveled optical crystal envelope with ultra-low roughness (0.01)
- * 2. Solid thick crystal base ("Glace d'Eau") occupying bottom ~28% of the bottle
- * 3. Suspended U-curved inner liquid chamber with deep royal midnight to sapphire gradient
- * 4. Pure transparent silkscreened ZÄFIZZY typography floating directly on the glass (no fake plaque boxes)
- * 5. Weighted cylindrical cap with brushed dark slate-navy grain and mirror-chrome bevel trims
- * 6. Classical fluted warm ivory marble plinth
+ * 1. Precision-beveled transparent optical crystal glass envelope (IOR 1.52, transmission 0.97)
+ * 2. Solid thick crystal foundation ("Glace d'Eau") occupying bottom ~28% of the bottle
+ * 3. Fully filled inner chamber with translucent rich brown alcohol perfume liquid (aged bourbon / cognac)
+ * 4. Level liquid surface meniscus with delicate surface tension boundary
+ * 5. Official ZÄFIZZY brand logo decal physically silkscreened on the front crystal face
+ * 6. Signature midnight navy blue weighted cylindrical cap with brushed metal texture and platinum trims
+ * 7. Classical fluted warm ivory marble plinth
  */
 export default function ProceduralPerfumeBottle({ isMobile = false }) {
-  // Brand silkscreen typography decal
-  const labelTexture = useMemo(() => {
+  // Official ZÄFIZZY brand logo texture from assets
+  const logoTexture = useMemo(() => {
     if (typeof window !== 'undefined') {
-      return createBottleBrandTexture();
+      const loader = new THREE.TextureLoader();
+      const tex = loader.load(encodeURI(BRAND_IDENTITY.assets.logo));
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.generateMipmaps = true;
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      return tex;
     }
     return null;
   }, []);
 
-  // Luminous liquid gradient texture (midnight to oceanic sapphire)
+  // Luminous pale straw-gold / light champagne perfume alcohol gradient texture
   const liquidTexture = useMemo(() => {
     if (typeof window !== 'undefined') {
       return createLiquidGradientTexture();
@@ -43,7 +50,7 @@ export default function ProceduralPerfumeBottle({ isMobile = false }) {
     return null;
   }, []);
 
-  // Mathematically accurate fluted marble pedestal geometry matching signature-bottle.jpg
+  // Mathematically accurate fluted marble pedestal geometry
   const flutedPedestalGeometry = useMemo(() => {
     const shape = new THREE.Shape();
     const segments = 120;
@@ -53,7 +60,6 @@ export default function ProceduralPerfumeBottle({ isMobile = false }) {
 
     for (let i = 0; i <= segments; i++) {
       const angle = (i / segments) * Math.PI * 2;
-      // Scalloped concave fluting
       const fluteOffset = Math.sin(angle * numFlutes) * fluteDepth;
       const r = baseRadius + fluteOffset;
       const x = Math.cos(angle) * r;
@@ -77,81 +83,120 @@ export default function ProceduralPerfumeBottle({ isMobile = false }) {
     return geom;
   }, []);
 
+  const groupScale = isMobile ? 0.82 : 1.0;
+  const groupPosY = isMobile ? -0.22 : -0.15;
+
   return (
-    <group position={[0, -0.15, 0]}>
+    <group position={[0, groupPosY, 0]} scale={groupScale}>
       
       {/* ─────────────────────────────────────────────────────────────
-          1. SUSPENDED INNER LIQUID CHAMBER (Royal Midnight Sapphire)
-          Opaque PBR mesh so it renders into the WebGL transmission buffer
+          1. PERFUME LIQUID CHAMBER (AUTHENTIC RICH BROWN ALCOHOL)
+          Completely fills flacon (Full Capacity) with aged bourbon/cognac brown perfume
          ───────────────────────────────────────────────────────────── */}
-      <group position={[0, 0.22, 0]}>
-        {/* Main liquid body */}
+      <group position={[0, 0, 0]}>
+        {/* Main Luminous Rich Brown Alcohol Liquid Volume (Full Bottle Fill) */}
         <RoundedBox
-          args={[1.74, 1.95, 0.88]}
-          radius={0.18}
+          args={[1.74, 2.38, 0.88]}
+          radius={0.16}
           smoothness={6}
-          position={[0, 0, 0]}
+          position={[0, 0.285, 0]}
         >
           <meshPhysicalMaterial
             map={liquidTexture}
-            color="#091b38"
-            roughness={0.10}
-            metalness={0.12}
+            color="#56220A"
+            roughness={0.06}
+            metalness={0.02}
             clearcoat={1.0}
-            clearcoatRoughness={0.03}
+            clearcoatRoughness={0.02}
             envMapIntensity={2.2}
           />
         </RoundedBox>
 
-        {/* Liquid surface top meniscus */}
-        <mesh position={[0, 0.976, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        {/* Level Liquid Surface Meniscus at Full Fill Line */}
+        <mesh position={[0, 1.475, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[1.70, 0.84]} />
+          <meshPhysicalMaterial
+            color="#260C03"
+            roughness={0.04}
+            metalness={0.05}
+            clearcoat={1.0}
+            clearcoatRoughness={0.02}
+            envMapIntensity={2.2}
+          />
+        </mesh>
+
+        {/* Meniscus surface boundary tension rim */}
+        <mesh position={[0, 1.477, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.74, 0.84, 48]} />
           <meshStandardMaterial
-            color="#051022"
+            color="#7E320E"
             roughness={0.05}
-            metalness={0.2}
-            envMapIntensity={2.5}
+            metalness={0.20}
+          />
+        </mesh>
+
+        {/* Fine clear atomizer dip tube descending through the dark liquid */}
+        <mesh position={[0.02, 0.32, 0]}>
+          <cylinderGeometry args={[0.018, 0.018, 2.45, 24]} />
+          <meshPhysicalMaterial
+            color="#FFFFFF"
+            transmission={0.88}
+            transparent={true}
+            roughness={0.04}
+            ior={1.48}
+            thickness={0.03}
+            envMapIntensity={2.0}
           />
         </mesh>
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
           2. OUTER OPTICAL CRYSTAL FLACON
-          Solid beveled crystal envelope; bottom 26% is pure clear crystal base
+          Precision-beveled transparent crystal envelope enclosing the brown perfume
          ───────────────────────────────────────────────────────────── */}
       <RoundedBox
         args={[2.08, 3.16, 1.22]}
-        radius={0.07}
-        smoothness={6}
+        radius={0.08}
+        smoothness={8}
         position={[0, 0, 0]}
+        renderOrder={1}
       >
         <meshPhysicalMaterial
           color="#FFFFFF"
-          transmission={0.96}
+          transmission={0.97}
           transparent={true}
-          roughness={0.015}
-          metalness={0.02}
+          roughness={0.02}
+          metalness={0.01}
           ior={1.52}
-          thickness={0.6}
+          thickness={0.65}
+          attenuationColor="#FFFFFF"
+          attenuationDistance={12.0}
           specularIntensity={1.0}
           specularColor="#FFFFFF"
           clearcoat={1.0}
-          clearcoatRoughness={0.01}
-          envMapIntensity={2.8}
+          clearcoatRoughness={0.02}
+          envMapIntensity={1.8}
         />
       </RoundedBox>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. BRAND WORDMARK SILKSCREEN (Decal on front glass)
+          3. OFFICIAL ZÄFIZZY BRAND LOGO (Applied Front Glass Emblem)
+          Exact brand asset rendered directly onto front glass face
          ───────────────────────────────────────────────────────────── */}
-      {labelTexture && (
-        <mesh position={[0, 0.02, 0.618]}>
-          <planeGeometry args={[1.5, 1.5]} />
-          <meshBasicMaterial
-            map={labelTexture}
+      {logoTexture && (
+        <mesh position={[0, 0.08, 0.614]} renderOrder={2}>
+          <planeGeometry args={[1.32, 0.704]} />
+          <meshStandardMaterial
+            map={logoTexture}
             transparent={true}
+            opacity={0.96}
+            roughness={0.15}
+            metalness={0.12}
             depthWrite={false}
-            side={THREE.DoubleSide}
+            polygonOffset={true}
+            polygonOffsetFactor={-1.5}
+            polygonOffsetUnits={-1.5}
+            side={THREE.FrontSide}
           />
         </mesh>
       )}
@@ -197,52 +242,56 @@ export default function ProceduralPerfumeBottle({ isMobile = false }) {
       </group>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. WEIGHTED BRUSHED METALLIC CAP
-          Brushed midnight slate-navy metal with mirror-chrome bevel rim
+          6. WEIGHTED METALLIC CAP IN SIGNATURE MIDNIGHT NAVY BLUE
+          Haute parfumerie lacquered midnight navy cap (#101E38)
          ───────────────────────────────────────────────────────────── */}
       <group position={[0, 2.32, 0]}>
-        {/* Mirror-chrome bottom bevel ring */}
+        {/* Polished deep navy bevel ring base */}
         <mesh position={[0, -0.46, 0]}>
           <cylinderGeometry args={[0.525, 0.525, 0.05, 48]} />
           <meshStandardMaterial
-            color="#FFFFFF"
-            metalness={0.98}
-            roughness={0.04}
-            envMapIntensity={3.2}
+            color="#182A4D"
+            metalness={0.70}
+            roughness={0.12}
+            envMapIntensity={2.4}
           />
         </mesh>
 
-        {/* Main brushed midnight metal cylinder */}
+        {/* Main signature midnight navy blue cylinder */}
         <mesh position={[0, 0.0, 0]}>
           <cylinderGeometry args={[0.518, 0.518, 0.90, 48]} />
-          <meshStandardMaterial
+          <meshPhysicalMaterial
             map={brushedMetalTexture}
-            color="#121b2d"
-            metalness={0.88}
-            roughness={0.22}
+            color="#101E38"
+            metalness={0.58}
+            roughness={0.18}
+            clearcoat={0.85}
+            clearcoatRoughness={0.12}
             envMapIntensity={2.2}
           />
         </mesh>
 
-        {/* Mirror-chrome top bevel rim */}
+        {/* Polished deep navy top bevel rim */}
         <mesh position={[0, 0.46, 0]}>
           <cylinderGeometry args={[0.505, 0.52, 0.06, 48]} />
           <meshStandardMaterial
-            color="#FFFFFF"
-            metalness={0.98}
-            roughness={0.04}
-            envMapIntensity={3.4}
+            color="#182A4D"
+            metalness={0.70}
+            roughness={0.12}
+            envMapIntensity={2.4}
           />
         </mesh>
 
-        {/* Mirror-chrome top recessed disc */}
+        {/* Midnight navy recessed disc */}
         <mesh position={[0, 0.495, 0]}>
           <cylinderGeometry args={[0.47, 0.47, 0.02, 48]} />
-          <meshStandardMaterial
-            color="#E2E8F0"
-            metalness={0.98}
-            roughness={0.05}
-            envMapIntensity={3.0}
+          <meshPhysicalMaterial
+            color="#101E38"
+            metalness={0.62}
+            roughness={0.16}
+            clearcoat={0.9}
+            clearcoatRoughness={0.1}
+            envMapIntensity={2.2}
           />
         </mesh>
 
