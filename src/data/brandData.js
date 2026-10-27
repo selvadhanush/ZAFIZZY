@@ -15,6 +15,8 @@ export const BRAND_IDENTITY = {
   assets: {
     logo: "/assets/ZAFIZZY Logo.psd.png",
     bismillah: "/assets/bismillah.png",
+    poemForHim: "/assets/poem-for-him.png",
+    poemForHer: "/assets/poem-for-her.png",
     pattern: "/assets/BG.png",
     signatureBottle: "/assets/signature-bottle.jpg",
     fragranceWorld: "/assets/fragrance-world.jpg",

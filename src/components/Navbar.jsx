@@ -18,6 +18,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
     { label: "3D Experience", href: "#experience" },
     { label: "Philosophy", href: "#philosophy" },
     { label: "Flacon Dossier", href: "#signature" },
+    { label: "Poem Dual", href: "#poem-collection" },
     { label: "Terroir", href: "#world" },
     { label: "Reviews", href: "#reviews" },
     { label: "Gazette", href: "#gazette" },

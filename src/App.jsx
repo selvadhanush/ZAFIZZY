@@ -5,6 +5,7 @@ import PerfumeExperience from './components/3d/PerfumeExperience';
 import BrandPhilosophy from './components/BrandPhilosophy';
 import PerfumeCollectionShowcase from './components/PerfumeCollectionShowcase';
 import SignatureFragrance from './components/SignatureFragrance';
+import PoemDuoComparison from './components/PoemDuoComparison';
 import FragranceWorld from './components/FragranceWorld';
 import PatronReviews from './components/PatronReviews';
 import AtelierGazette from './components/AtelierGazette';
@@ -70,6 +71,9 @@ export default function App() {
 
         {/* 3. The Signature Flacon Technical Dossier & Atelier Metrics */}
         <SignatureFragrance onInspectNotes={handleInspectNotes} />
+
+        {/* 3.5 The Poem Collection — Dual Olfactory Masterworks (For Him & For Her Drag Slider) */}
+        <PoemDuoComparison onOpenConcierge={() => setConciergeOpen(true)} />
 
         {/* 4. The Fragrance World: Atmospheric Terroir & Window Parallax */}
         <FragranceWorld />
