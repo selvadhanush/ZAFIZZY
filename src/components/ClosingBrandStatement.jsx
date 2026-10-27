@@ -14,12 +14,17 @@ export default function ClosingBrandStatement({ onOpenAudit, onOpenConcierge }) 
         {/* Memorable Closing Composition */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-20">
           
-          {/* Supplied Exact Logo Image */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          {/* Supplied Exact Logo Image & Calligraphy */}
+          <div className="flex flex-col items-center justify-center mb-6 sm:mb-8">
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Brand Logo — Perfumers & Perfumery"
               className="h-12 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-500 hover:scale-105"
+            />
+            <img
+              src={BRAND_IDENTITY.assets.bismillah}
+              alt="Bismillah ir-Rahman ir-Rahim"
+              className="h-3 sm:h-4 md:h-5 w-auto object-contain mt-2 sm:mt-3 opacity-90"
             />
           </div>
 
