@@ -68,19 +68,19 @@ export default function BrandPreloader({ onLoaded }) {
       {/* Center Preloader Brand Composition (Matching Reference Layout) */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto">
         
-        {/* Brand Logo */}
-        <div className="mb-6 flex justify-center">
+        {/* Brand Logo & Calligraphy */}
+        <div className="mb-6 sm:mb-8 flex flex-col items-center justify-center">
           <img
             src={BRAND_IDENTITY.assets.logo}
-            alt="ZAFIZZY Logo"
-            className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
+            alt="ZÄFIZZY Logo"
+            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
+          />
+          <img
+            src={BRAND_IDENTITY.assets.bismillah}
+            alt="Bismillah ir-Rahman ir-Rahim"
+            className="h-4 sm:h-5 md:h-6 w-auto object-contain mt-2.5 sm:mt-3 brightness-0 invert opacity-95 drop-shadow-[0_2px_14px_rgba(255,255,255,0.4)]"
           />
         </div>
-
-        {/* Primary Luxury Wordmark: ZAFIZZY (Single Unified Word) */}
-        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-normal tracking-wide text-[#F4F1EA] mb-2 uppercase drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]">
-          ZAFIZZY
-        </h1>
 
         {/* Subtitle: Fragrances */}
         <div className="text-xs sm:text-sm tracking-[0.3em] uppercase text-mist-blue/90 font-sans font-medium mb-2">
