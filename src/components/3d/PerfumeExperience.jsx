@@ -1,161 +1,14 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { ContactShadows } from '@react-three/drei';
-import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowDown, Sparkles, Clock, Compass, ShieldCheck, Droplet, ArrowUpRight, Box } from 'lucide-react';
-import ProceduralPerfumeBottle from './ProceduralPerfumeBottle';
-import ProductLighting from './ProductLighting';
-import StudioEnvironment from './StudioEnvironment';
-import AtmosphereParticles from './AtmosphereParticles';
+import HeroFrameSequence from './HeroFrameSequence';
 import { BRAND_IDENTITY, FRAGRANCE_DATA, HERO_PILLARS } from '../../data/brandData';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * 3D Scene Core: Runs at 60fps in requestAnimationFrame.
- * Reads scrollProgressRef and pointerRef directly for zero React re-render thrashing.
- */
-function BottleScene({ scrollProgressRef, pointerRef, isMobile }) {
-  const outerGroupRef = useRef(null);
-  const tiltGroupRef = useRef(null);
-  const cameraTargetRef = useRef(new THREE.Vector3(0, 0, 0));
-
-  useFrame((state) => {
-    const p = scrollProgressRef.current || 0;
-
-    let targetRotY = 0;
-    let targetPosY = -0.18;
-    let targetCamZ = isMobile ? 9.8 : 8.8;
-    let targetCamY = 0.38;
-    let targetCamX = 0;
-
-    if (p < 0.22) {
-      // Scene 1: Initial Reveal with generous editorial headroom below Navbar
-      const t = p / 0.22;
-      targetRotY = THREE.MathUtils.lerp(-0.35, 0.0, t);
-      targetCamZ = THREE.MathUtils.lerp(isMobile ? 10.6 : 9.8, isMobile ? 9.8 : 8.8, t);
-      targetCamY = THREE.MathUtils.lerp(0.50, 0.38, t);
-      targetPosY = THREE.MathUtils.lerp(-0.35, -0.18, t);
-    } else if (p < 0.46) {
-      // Scene 2: 360° Flacon Architecture Inspection (Full 360° turntable spin)
-      // Turns smoothly through a complete 360° rotation (0 to 2*PI)
-      const t = (p - 0.22) / 0.24;
-      targetRotY = t * Math.PI * 2;
-      targetCamZ = isMobile ? 9.8 : 8.8;
-      targetCamY = 0.38;
-      targetCamX = 0;
-      targetPosY = -0.18;
-    } else if (p < 0.70) {
-      // Scene 3: Olfactory Notes Macro Closeup (Bottle centered/offset, notes on right)
-      // Rotates smoothly to an alluring faceted angle (37°) showcasing liquid refraction
-      const t = (p - 0.46) / 0.24;
-      targetRotY = Math.PI * 2 + Math.sin(t * Math.PI * 0.5) * 0.65;
-      targetCamZ = THREE.MathUtils.lerp(isMobile ? 9.8 : 8.8, isMobile ? 7.6 : 6.3, Math.sin(t * Math.PI));
-      targetCamY = THREE.MathUtils.lerp(0.38, 0.20, t);
-      targetCamX = THREE.MathUtils.lerp(0, isMobile ? -0.18 : -0.58, Math.sin(t * Math.PI));
-      targetPosY = -0.18;
-    } else if (p < 0.88) {
-      // Scene 4: Nocturnal Terroir Transition (Elevated high-angle shot)
-      // Dynamic rotation under midnight lighting as camera rises
-      const t = (p - 0.70) / 0.18;
-      targetRotY = (Math.PI * 2 + 0.65) + t * (Math.PI - 0.65);
-      targetCamZ = THREE.MathUtils.lerp(isMobile ? 9.0 : 8.0, isMobile ? 10.0 : 9.0, t);
-      targetCamY = THREE.MathUtils.lerp(0.20, 0.95, t);
-      targetCamX = THREE.MathUtils.lerp(isMobile ? -0.18 : -0.58, isMobile ? -0.12 : -0.35, t);
-      targetPosY = -0.18;
-    } else {
-      // Scene 5: Final Hero Composition Settle (Front facing, perfectly centered)
-      // Completes full cycle to settle squarely front-facing (Math.PI * 4 = 720° = 0° logo front)
-      const t = (p - 0.88) / 0.12;
-      targetRotY = THREE.MathUtils.lerp(Math.PI * 3, Math.PI * 4, t);
-      targetCamZ = THREE.MathUtils.lerp(isMobile ? 10.0 : 9.0, isMobile ? 9.6 : 8.6, t);
-      targetCamY = THREE.MathUtils.lerp(0.95, 0.38, t);
-      targetCamX = THREE.MathUtils.lerp(isMobile ? -0.12 : -0.35, 0, t);
-      targetPosY = -0.22;
-    }
-
-    // Apply scroll-driven rotation & position to Outer Group with smooth physical dampening
-    if (outerGroupRef.current) {
-      // Smooth lerp for buttery turntable bearing rotation
-      outerGroupRef.current.rotation.y = THREE.MathUtils.lerp(
-        outerGroupRef.current.rotation.y,
-        targetRotY,
-        0.12
-      );
-
-      // Subtle resting float so bottle breathes and catches light even when stationary
-      const idleFloat = Math.sin(state.clock.elapsedTime * 1.5) * 0.015;
-      outerGroupRef.current.position.y = THREE.MathUtils.lerp(
-        outerGroupRef.current.position.y,
-        targetPosY + idleFloat,
-        0.1
-      );
-    }
-
-    // Apply additive desktop pointer tilt to Inner Group from pointerRef (never forces re-render)
-    if (tiltGroupRef.current && !isMobile && pointerRef.current) {
-      const maxTiltX = 0.08;
-      const maxTiltZ = 0.10;
-      const desiredTiltX = -pointerRef.current.y * maxTiltX;
-      const desiredTiltZ = -pointerRef.current.x * maxTiltZ;
-
-      tiltGroupRef.current.rotation.x = THREE.MathUtils.lerp(
-        tiltGroupRef.current.rotation.x,
-        desiredTiltX,
-        0.08
-      );
-      tiltGroupRef.current.rotation.z = THREE.MathUtils.lerp(
-        tiltGroupRef.current.rotation.z,
-        desiredTiltZ,
-        0.08
-      );
-    }
-
-    // Silky smooth camera positioning with zero jitter
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetCamX, 0.10);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetCamY, 0.10);
-    state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetCamZ, 0.10);
-
-    cameraTargetRef.current.set(state.camera.position.x * 0.25, targetPosY + 0.3, 0);
-    state.camera.lookAt(cameraTargetRef.current);
-  });
-
-  return (
-    <>
-      {/* Procedural Studio HDR Environment Map for Glass & Metal Reflections */}
-      <StudioEnvironment intensity={1.5} />
-
-      {/* Studio Lighting Rig */}
-      <ProductLighting />
-
-      {/* Airborne Mist Droplets with Soft Glow */}
-      <AtmosphereParticles count={isMobile ? 24 : 45} />
-
-      {/* Outer Group: Master Scroll-Driven Rotation */}
-      <group ref={outerGroupRef}>
-        {/* Inner Group: Additive Desktop Pointer Tilt */}
-        <group ref={tiltGroupRef}>
-          <ProceduralPerfumeBottle isMobile={isMobile} />
-        </group>
-      </group>
-
-      {/* Static Ground Contact Shadow (Rests on floor, captures live rotation smoothly at 256 resolution) */}
-      <ContactShadows
-        position={[0, -2.22, 0]}
-        opacity={0.46}
-        scale={5.8}
-        blur={2.4}
-        far={3.2}
-        resolution={256}
-      />
-    </>
-  );
-}
-
-/**
- * Master Scroll-Driven 3D Storytelling Experience
+ * Master Scroll-Driven Bottle Sequence Experience
  * High-performance architecture:
  * 1. ZERO React re-renders on pointer movement (pointerRef mutation)
  * 2. GSAP timeline drives DOM overlay opacities and transforms with hardware acceleration
@@ -164,7 +17,6 @@ function BottleScene({ scrollProgressRef, pointerRef, isMobile }) {
 export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const containerRef = useRef(null);
   const scrollProgressRef = useRef(0);
-  const pointerRef = useRef({ x: 0, y: 0 });
 
   // DOM Refs for direct hardware-accelerated animations (No React re-render thrashing)
   const progressTextRef = useRef(null);
@@ -175,37 +27,18 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const scene3Ref = useRef(null);
   const scene4Ref = useRef(null);
   const scene5Ref = useRef(null);
-  const darkOverlayRef = useRef(null);
 
   const [activeNoteStage, setActiveNoteStage] = useState('top');
-  const [isMobile, setIsMobile] = useState(false);
-  const [webglSupported, setWebglSupported] = useState(true);
-
-  // Check mobile & WebGL support once on mount
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) setWebglSupported(false);
-    } catch (e) {
-      setWebglSupported(false);
-    }
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const [reducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   // GSAP ScrollTrigger Master Timeline (GPU Accelerated Scoped Cleanup)
   useEffect(() => {
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReducedMotion) {
-        scrollProgressRef.current = 0.5;
+        scrollProgressRef.current = 0;
         return;
       }
 
@@ -286,14 +119,6 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         0.68
       );
 
-      // WHITE-TO-MIDNIGHT-NAVY TRANSITION:
-      // Smooth GPU opacity fade of dark background overlay (0 expensive repaints)
-      tl.fromTo(darkOverlayRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.10, ease: 'power2.inOut' },
-        0.68
-      );
-
       // SCENE 4: Nocturnal Terroir Text
       tl.fromTo(scene4Ref.current,
         { opacity: 0, y: 30 },
@@ -303,12 +128,6 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
       tl.to(scene4Ref.current,
         { opacity: 0, y: -30, duration: 0.08, ease: 'power2.in' },
         0.85
-      );
-
-      // FADE DARK OVERLAY BACK TO LUMINOUS WHITE (Harmonizing with Scene 5 and Chapter 1 below)
-      tl.to(darkOverlayRef.current,
-        { opacity: 0, duration: 0.06, ease: 'power2.inOut' },
-        0.86
       );
 
       // SCENE 5: The Final Masterwork Settle (Pure white studio framing)
@@ -336,81 +155,29 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
     };
   }, []);
 
-  // Desktop Pointer Move handler: Mutates pointerRef without triggering React re-renders!
-  const handlePointerMove = useCallback((e) => {
-    if (isMobile) return;
-    const { innerWidth, innerHeight } = window;
-    pointerRef.current.x = (e.clientX / innerWidth) * 2 - 1;
-    pointerRef.current.y = (e.clientY / innerHeight) * 2 - 1;
-  }, [isMobile]);
-
-  const handlePointerLeave = useCallback(() => {
-    pointerRef.current.x = 0;
-    pointerRef.current.y = 0;
-  }, []);
-
   return (
     <div
       ref={containerRef}
-      onMouseMove={handlePointerMove}
-      onMouseLeave={handlePointerLeave}
-      className="relative w-full h-[540vh] bg-transparent text-navy-900"
+      className="hero-dark relative w-full h-[540vh] bg-[#060606] text-navy-900"
     >
       {/* STICKY FULLSCREEN VIEWPORT CONTAINER */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
+      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-[#060606]">
         
-        {/* Ambient Shifting Light Halo */}
-        <div className="absolute w-[600px] lg:w-[900px] h-[600px] lg:h-[900px] rounded-full blur-3xl pointer-events-none bg-radial-lighting opacity-80" />
+        {/* Ambient warm amber halo */}
+        <div className="absolute w-[600px] lg:w-[900px] h-[600px] lg:h-[900px] rounded-full blur-3xl pointer-events-none bg-[radial-gradient(circle,rgba(201,160,92,0.10)_0%,transparent_65%)]" />
 
-        {/* ─── GPU-Accelerated Dark Nocturnal Overlay for White-to-Navy Transition ─── */}
-        <div
-          ref={darkOverlayRef}
-          className="absolute inset-0 z-[5] pointer-events-none bg-navy-950 opacity-0 transition-none"
-        >
-          {/* Subtle Stardust Glow Field */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-navy-800/40 rounded-full blur-3xl pointer-events-none" />
-          <div
-            className="absolute inset-0 bg-brand-pattern opacity-[0.07] mix-blend-screen pointer-events-none bg-cover bg-center"
-            aria-hidden="true"
-          />
+        {/* SCROLL-SCRUBBED BOTTLE SEQUENCE (static poster under prefers-reduced-motion) */}
+        <div className="absolute inset-0 z-10 w-full h-full pointer-events-none">
+          {reducedMotion ? (
+            <img
+              src="/hero-frames/poster.webp"
+              alt="ZÄFIZZY Amber Oud perfume bottle"
+              className="w-full h-full object-contain"
+            />
+          ) : (
+            <HeroFrameSequence scrollProgressRef={scrollProgressRef} />
+          )}
         </div>
-
-        {/* 3D REAL-TIME CANVAS */}
-        {webglSupported ? (
-          <div className="absolute inset-0 z-10 w-full h-full pointer-events-none">
-            <Canvas
-              dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)]}
-              camera={{ position: [0, 0.4, 8.4], fov: 36 }}
-              gl={{
-                antialias: true,
-                alpha: true,
-                powerPreference: 'high-performance',
-                toneMapping: THREE.ACESFilmicToneMapping,
-                toneMappingExposure: 1.18,
-              }}
-            >
-              <BottleScene
-                scrollProgressRef={scrollProgressRef}
-                pointerRef={pointerRef}
-                isMobile={isMobile}
-              />
-            </Canvas>
-          </div>
-        ) : (
-          /* WebGL Fallback if device lacks hardware 3D */
-          <div className="absolute inset-0 z-10 flex items-center justify-center p-6">
-            <div className="max-w-md bg-white p-6 rounded shadow-xl border border-navy-900/10 text-center">
-              <img
-                src={BRAND_IDENTITY.assets.signatureBottle}
-                alt="ZÄFIZZY Flacon"
-                className="w-48 mx-auto rounded mb-4"
-              />
-              <p className="text-xs text-navy-muted">
-                3D WebGL acceleration not detected. High-resolution visual fallback engaged.
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* SYNCHRONIZED EDITORIAL OVERLAYS (Z-20) */}
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 sm:p-6 md:p-12">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useProgress } from '@react-three/drei';
 import { BRAND_IDENTITY } from '../data/brandData';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -13,7 +12,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
  * - Graceful exit transition revealing the 3D flacon experience
  */
 export default function BrandPreloader({ onLoaded }) {
-  const { progress: threeProgress } = useProgress();
+  const threeProgress = 0;
   const [displayProgress, setDisplayProgress] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isDone, setIsDone] = useState(false);

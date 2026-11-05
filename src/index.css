@@ -149,3 +149,19 @@ body {
     animation: none !important;
   }
 }
+
+/* ── Hero bottle sequence: dark stage (#060606) palette overrides, scoped to the hero ── */
+.hero-dark .text-navy-900,
+.hero-dark .text-navy-950,
+.hero-dark .text-navy-800 { color: #EDE8E0; }
+.hero-dark .text-navy-muted { color: rgba(237, 232, 224, 0.7); }
+.hero-dark .bg-navy-950\/70 { background-color: #C9A05C; }
+.hero-dark .bg-white\/90,
+.hero-dark .bg-white\/95 { background-color: rgba(10, 8, 6, 0.78); }
+.hero-dark .border-navy-900\/10,
+.hero-dark .border-navy-900\/20,
+.hero-dark .border-navy-900\/5 { border-color: rgba(201, 160, 92, 0.25); }
+.hero-dark .bg-navy-900 { background-color: #C9A05C; color: #060606; }
+.hero-dark .bg-navy-900\/5 { background-color: rgba(237, 232, 224, 0.06); }
+.hero-dark .bg-ivory-warm\/40 { background-color: rgba(237, 232, 224, 0.05); }
+.hero-dark .btn-luxury-shimmer { color: #060606; }
