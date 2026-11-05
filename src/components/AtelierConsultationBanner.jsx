@@ -49,6 +49,7 @@ export default function AtelierConsultationBanner({ onOpenConcierge }) {
           {/* Left Column: Atmospheric Terroir Image & Pattern Sheen */}
           <div className="lg:col-span-5 relative min-h-[240px] sm:min-h-[280px] lg:min-h-[380px] bg-navy-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 text-white overflow-hidden">
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.fragranceWorld}
               alt="ZÄFIZZY Botanical Terroir"
               className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity"
@@ -109,7 +110,7 @@ export default function AtelierConsultationBanner({ onOpenConcierge }) {
             <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <button
                 onClick={onOpenConcierge}
-                className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-white text-navy-900 text-xs uppercase tracking-widest-xl px-7 py-3.5 sm:px-8 sm:py-4 rounded-sm hover:bg-ivory-warm transition-all font-medium shadow-luxury w-full sm:w-auto"
+                className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-white text-navy-900 text-xs uppercase tracking-widest-xl px-7 py-3.5 sm:px-8 sm:py-4 rounded-sm hover:bg-ivory-warm transition-[color,background-color,border-color,box-shadow,opacity,transform] font-medium shadow-luxury w-full sm:w-auto"
               >
                 <span>Request Private Appointment</span>
                 <ArrowUpRight className="w-4 h-4 text-navy-900" />

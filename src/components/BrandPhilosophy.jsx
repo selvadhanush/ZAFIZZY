@@ -127,7 +127,7 @@ export default function BrandPhilosophy() {
             <div
               key={pillar.number}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className="relative p-6 sm:p-8 md:p-9 bg-white/95 backdrop-blur-sm border border-navy-900/10 rounded-sm hover:border-navy-900/30 transition-all duration-300 group shadow-sm hover:shadow-luxury"
+              className="will-change-transform relative p-6 sm:p-8 md:p-9 bg-white/95 border border-navy-900/10 rounded-sm hover:border-navy-900/30 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 group shadow-sm hover:shadow-luxury"
             >
               {/* Pillar Number & Monogram Motif */}
               <div className="flex items-center justify-between mb-6">

@@ -45,7 +45,7 @@ export default function AtelierGazette() {
     <section
       id="gazette"
       ref={sectionRef}
-      className="relative py-14 sm:py-20 md:py-28 bg-white/70 backdrop-blur-[1px] border-b border-navy-900/10 overflow-hidden"
+      className="relative py-14 sm:py-20 md:py-28 bg-white/70 border-b border-navy-900/10 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         
@@ -75,12 +75,13 @@ export default function AtelierGazette() {
             <article
               key={post.id}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className="group cursor-pointer flex flex-col justify-between bg-ivory-warm/20 rounded-sm border border-navy-900/10 p-4 sm:p-5 hover:border-navy-900/30 transition-all duration-300 hover:shadow-luxury"
+              className="group cursor-pointer flex flex-col justify-between bg-ivory-warm/20 rounded-sm border border-navy-900/10 p-4 sm:p-5 hover:border-navy-900/30 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 hover:shadow-luxury"
             >
               <div>
                 {/* Image Frame with Gentle Scale on Hover */}
                 <div className="relative aspect-[16/10] overflow-hidden rounded-sm mb-6 bg-navy-950">
                   <img
+ decoding="async"
                     src={post.image}
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

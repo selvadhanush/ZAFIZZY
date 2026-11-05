@@ -145,7 +145,7 @@ export default function PerfumeCollectionShowcase() {
 
           <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
             {/* Active Card Indicator */}
-            <div className="flex items-center gap-1.5 font-mono text-xs text-navy-950 bg-white/80 backdrop-blur-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded border border-navy-900/10 shadow-sm">
+            <div className="flex items-center gap-1.5 font-mono text-xs text-navy-950 bg-white/80 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded border border-navy-900/10 shadow-sm">
               <span className="font-semibold text-navy-950">0{activeIndex + 1}</span>
               <span className="text-navy-950/40">/</span>
               <span className="text-navy-950/60">03</span>
@@ -159,7 +159,7 @@ export default function PerfumeCollectionShowcase() {
               {[0, 1, 2].map((idx) => (
                 <span
                   key={idx}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                  className={`h-1.5 rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 ${
                     activeIndex === idx
                       ? 'w-6 bg-navy-950'
                       : 'w-1.5 bg-navy-950/20'
@@ -176,12 +176,13 @@ export default function PerfumeCollectionShowcase() {
             <div
               key={perfume.id}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className="absolute inset-0 w-full h-full bg-white/95 backdrop-blur-md rounded-sm border border-navy-900/10 shadow-luxury p-3.5 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-3 sm:gap-6 md:gap-10 overflow-hidden"
+              className="absolute inset-0 w-full h-full bg-white/95 rounded-sm border border-navy-900/10 shadow-luxury p-3.5 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-3 sm:gap-6 md:gap-10 overflow-hidden"
               style={{ willChange: 'transform, opacity' }}
             >
               {/* Left Column: Flacon Visual & Accent Badge */}
               <div className="w-full md:w-5/12 h-24 sm:h-40 md:h-full relative flex items-center justify-center bg-gradient-to-b from-ivory-warm/60 to-mist-blue/20 rounded border border-navy-900/5 p-2 sm:p-4 overflow-hidden group shrink-0">
                 <img
+ decoding="async"
                   src={perfume.image}
                   alt={perfume.name}
                   className="max-h-full max-w-full object-contain filter drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
@@ -189,7 +190,7 @@ export default function PerfumeCollectionShowcase() {
                 />
 
                 {/* Floating Concentration Pill */}
-                <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/90 backdrop-blur-sm rounded text-[9px] sm:text-[10px] font-mono font-semibold tracking-wider uppercase text-navy-950 border border-navy-900/10 shadow-sm">
+                <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/90 rounded text-[9px] sm:text-[10px] font-mono font-semibold tracking-wider uppercase text-navy-950 border border-navy-900/10 shadow-sm">
                   {perfume.concentration.split(' ')[0]} EXTRAIT
                 </div>
 

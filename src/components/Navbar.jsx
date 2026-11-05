@@ -38,7 +38,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
           scrolled
-            ? 'bg-white/90 backdrop-blur-md border-b border-navy-900/10 py-3 shadow-sm'
+            ? 'bg-white/90 border-b border-navy-900/10 py-3 shadow-sm'
             : 'bg-transparent py-5'
         }`}
       >

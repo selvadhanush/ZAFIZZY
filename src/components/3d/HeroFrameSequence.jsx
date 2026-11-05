@@ -25,7 +25,7 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
 
     const resize = () => {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = 1; // source frames are 1280x720; a larger backing store only costs fill-rate
       w = Math.max(1, Math.round(rect.width * dpr));
       h = Math.max(1, Math.round(rect.height * dpr));
       canvas.width = w;
@@ -46,7 +46,11 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
       const idx = order[cursor++];
       const img = new Image();
       img.decoding = 'async';
-      img.onload = () => { frames[idx] = img; lastDrawn = -1; loadNext(); };
+      img.onload = () => {
+        // Pre-decode off the main thread so the first draw of a frame never janks
+        const done = () => { frames[idx] = img; lastDrawn = -1; loadNext(); };
+        if (img.decode) img.decode().then(done, done); else done();
+      };
       img.onerror = loadNext;
       img.src = FRAME_SRC(idx);
     };
@@ -74,7 +78,17 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
       ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
     };
 
+    // Don't burn frames while the hero is off-screen or the tab is hidden
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !raf && !cancelled) raf = requestAnimationFrame(tick);
+    });
+    io.observe(canvas);
+
     const tick = () => {
+      raf = 0;
+      if (!visible || cancelled) return;
       const target = Math.min(1, Math.max(0, scrollProgressRef.current || 0)) * (FRAME_COUNT - 1);
       current += (target - current) * 0.18;
       if (Math.abs(target - current) < 0.01) current = target;
@@ -83,6 +97,7 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
         draw(idx);
         lastDrawn = idx;
       }
+      // Keep running only while still easing or while scroll position is changing
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -91,6 +106,7 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
       cancelled = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io.disconnect();
     };
   }, [scrollProgressRef]);
 

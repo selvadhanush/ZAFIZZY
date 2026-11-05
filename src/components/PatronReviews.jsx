@@ -84,7 +84,7 @@ export default function PatronReviews() {
             <div
               key={review.id}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className="bg-white p-5 sm:p-8 md:p-9 rounded-sm border border-navy-900/10 shadow-luxury hover:shadow-luxury-hover transition-all duration-300 flex flex-col justify-between group hover:border-navy-900/30"
+              className="bg-white p-5 sm:p-8 md:p-9 rounded-sm border border-navy-900/10 shadow-luxury hover:shadow-luxury-hover transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 flex flex-col justify-between group hover:border-navy-900/30"
             >
               <div>
                 {/* 5-Star Diamond Rating */}

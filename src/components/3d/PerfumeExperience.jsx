@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowDown, Sparkles, Clock, Compass, ShieldCheck, Droplet, ArrowUpRight, Box } from 'lucide-react';
+import { ShieldCheck, Droplet, ArrowUpRight } from 'lucide-react';
 import HeroFrameSequence from './HeroFrameSequence';
 import { BRAND_IDENTITY, FRAGRANCE_DATA, HERO_PILLARS } from '../../data/brandData';
 
@@ -14,6 +14,14 @@ gsap.registerPlugin(ScrollTrigger);
  * 2. GSAP timeline drives DOM overlay opacities and transforms with hardware acceleration
  * 3. Dedicated GPU opacity layer handles White-to-Navy transition with zero layout reflow
  */
+const STAGE_LABELS = [
+  'STAGE I: THE REVEAL',
+  'STAGE II: FLACON INSPECTION',
+  'STAGE III: OLFACTORY NOTES',
+  'STAGE IV: NOCTURNAL TERROIR',
+  'STAGE V: THE MASTERWORK',
+];
+
 export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const containerRef = useRef(null);
   const scrollProgressRef = useRef(0);
@@ -42,6 +50,9 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         return;
       }
 
+      let lastPct = -1;
+      let lastStage = -1;
+
       // Master scroll timeline
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -54,18 +65,18 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             const p = self.progress;
             scrollProgressRef.current = p;
 
-            // Direct DOM percentage update (0 React re-renders)
-            if (progressTextRef.current) {
-              progressTextRef.current.textContent = `${Math.round(p * 100)}%`;
+            // Direct DOM percentage update (0 React re-renders) — only when the value changes
+            const pct = Math.round(p * 100);
+            if (pct !== lastPct && progressTextRef.current) {
+              lastPct = pct;
+              progressTextRef.current.textContent = `${pct}%`;
             }
 
-            // Direct Stage Name Text
-            if (stageTextRef.current) {
-              if (p < 0.22) stageTextRef.current.textContent = "STAGE I: THE REVEAL";
-              else if (p < 0.46) stageTextRef.current.textContent = "STAGE II: FLACON INSPECTION";
-              else if (p < 0.70) stageTextRef.current.textContent = "STAGE III: OLFACTORY NOTES";
-              else if (p < 0.88) stageTextRef.current.textContent = "STAGE IV: NOCTURNAL TERROIR";
-              else stageTextRef.current.textContent = "STAGE V: THE MASTERWORK";
+            // Direct Stage Name Text — only when the stage changes
+            const stage = p < 0.22 ? 0 : p < 0.46 ? 1 : p < 0.70 ? 2 : p < 0.88 ? 3 : 4;
+            if (stage !== lastStage && stageTextRef.current) {
+              lastStage = stage;
+              stageTextRef.current.textContent = STAGE_LABELS[stage];
             }
 
             // Discreet Note Switcher (Top, Heart, Base)
@@ -164,7 +175,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
       <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-[#060606]">
         
         {/* Ambient warm amber halo */}
-        <div className="absolute w-[600px] lg:w-[900px] h-[600px] lg:h-[900px] rounded-full blur-3xl pointer-events-none bg-[radial-gradient(circle,rgba(201,160,92,0.10)_0%,transparent_65%)]" />
+        <div className="absolute w-[600px] lg:w-[900px] h-[600px] lg:h-[900px] rounded-full pointer-events-none bg-[radial-gradient(circle,rgba(201,160,92,0.10)_0%,transparent_65%)]" />
 
         {/* SCROLL-SCRUBBED BOTTLE SEQUENCE (static poster under prefers-reduced-motion) */}
         <div className="absolute inset-0 z-10 w-full h-full pointer-events-none">
@@ -199,7 +210,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* SCENE 1: THE REVEAL */}
           <div
             ref={scene1Ref}
-            className="max-w-xl self-start pointer-events-auto"
+            className="will-change-transform max-w-xl self-start pointer-events-auto"
           >
             <div className="flex items-center gap-2.5 mb-2 sm:mb-3">
               <div className="w-8 sm:w-10 h-[1.5px] bg-navy-950/70" />
@@ -230,13 +241,13 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* 4 HERO PILLAR CARDS (Directly inspired by reference video 00:03-00:06) */}
           <div
             ref={pillarsRef}
-            className="w-full self-center pointer-events-auto opacity-0"
+            className="will-change-transform w-full self-center pointer-events-auto opacity-0"
           >
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 max-w-6xl mx-auto">
               {HERO_PILLARS.map((pillar) => (
                 <div
                   key={pillar.code}
-                  className="bg-white/90 backdrop-blur-md p-3 sm:p-5 rounded-sm border border-navy-900/10 shadow-luxury hover:border-navy-900/30 transition-all duration-300"
+                  className="bg-white/90 p-3 sm:p-5 rounded-sm border border-navy-900/10 shadow-luxury hover:border-navy-900/30 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300"
                 >
                   <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-navy-muted uppercase mb-1.5 sm:mb-2">
                     <span>{pillar.code} //</span>
@@ -256,7 +267,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* SCENE 2: THE 360° INSPECTION */}
           <div
             ref={scene2Ref}
-            className="max-w-sm sm:max-w-md self-center sm:self-end text-center sm:text-right pointer-events-auto opacity-0"
+            className="will-change-transform max-w-sm sm:max-w-md self-center sm:self-end text-center sm:text-right pointer-events-auto opacity-0"
           >
             <span className="text-[10px] font-mono tracking-widest uppercase text-navy-muted block mb-1.5 sm:mb-2">
               02 // THREE-DIMENSIONAL TURNTABLE
@@ -267,7 +278,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             <p className="text-navy-muted text-xs sm:text-sm font-light leading-relaxed mb-4 sm:mb-6">
               Rotated gracefully in real-time space as you scroll. The hand-beveled optical crystal glass captures natural refraction, encasing the rich amber-brown alcohol perfume essence and brushed midnight navy cap.
             </p>
-            <div className="p-3 sm:p-4 bg-white/95 backdrop-blur-md border border-navy-900/10 rounded inline-block text-left text-[10px] sm:text-[11px] text-navy-900 font-mono space-y-1 sm:space-y-1.5 shadow-luxury w-full sm:w-auto">
+            <div className="p-3 sm:p-4 bg-white/95 border border-navy-900/10 rounded inline-block text-left text-[10px] sm:text-[11px] text-navy-900 font-mono space-y-1 sm:space-y-1.5 shadow-luxury w-full sm:w-auto">
               <div>FLACON: Optical Crystal Glass (IOR 1.52)</div>
               <div>LIQUID: Aged Amber-Brown Alcohol Extrait (Full Capacity)</div>
               <div>BASE: Solid Crystal "Glace d'Eau" Foundation</div>
@@ -279,9 +290,9 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* SCENE 3: OLFACTORY NOTES CHOREOGRAPHY */}
           <div
             ref={scene3Ref}
-            className="max-w-sm sm:max-w-md lg:max-w-lg self-center sm:self-end w-full pointer-events-auto opacity-0"
+            className="will-change-transform max-w-sm sm:max-w-md lg:max-w-lg self-center sm:self-end w-full pointer-events-auto opacity-0"
           >
-            <div className="bg-white/95 backdrop-blur-md p-4 sm:p-6 md:p-7 rounded-sm border border-navy-900/10 shadow-luxury">
+            <div className="bg-white/95 p-4 sm:p-6 md:p-7 rounded-sm border border-navy-900/10 shadow-luxury">
               {/* Note Stage Tabs */}
               <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-navy-900/10 mb-3 sm:mb-4">
                 <div className="flex items-center gap-2 sm:gap-2.5">
@@ -334,7 +345,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* SCENE 4: ATMOSPHERIC TERROIR TRANSITION */}
           <div
             ref={scene4Ref}
-            className="max-w-xl self-start pointer-events-auto opacity-0"
+            className="will-change-transform max-w-xl self-start pointer-events-auto opacity-0"
           >
             <span className="text-[10px] font-mono tracking-widest uppercase text-mist-blue block mb-1.5 sm:mb-2">
               04 // NOCTURNAL TERROIR
@@ -357,7 +368,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
           {/* SCENE 5: THE FINAL HERO MASTERWORK */}
           <div
             ref={scene5Ref}
-            className="max-w-xl self-center text-center pointer-events-auto opacity-0 w-full px-2"
+            className="will-change-transform max-w-xl self-center text-center pointer-events-auto opacity-0 w-full px-2"
           >
             <img
               src={BRAND_IDENTITY.assets.logo}
@@ -371,7 +382,7 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
               <button
                 onClick={onOpenConcierge}
-                className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-8 py-3.5 rounded-sm hover:bg-navy-800 transition-all shadow-luxury w-full sm:w-auto"
+                className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-8 py-3.5 rounded-sm hover:bg-navy-800 transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-luxury w-full sm:w-auto"
               >
                 <span>Inquire Private Atelier</span>
                 <ArrowUpRight className="w-4 h-4" />

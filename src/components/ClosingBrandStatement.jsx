@@ -8,7 +8,7 @@ export default function ClosingBrandStatement({ onOpenAudit, onOpenConcierge }) 
   };
 
   return (
-    <footer className="relative z-10 bg-white/75 backdrop-blur-[1px] pt-14 sm:pt-20 md:pt-24 pb-12 sm:pb-16 border-t border-navy-900/10 overflow-hidden">
+    <footer className="relative z-10 bg-white/75 pt-14 sm:pt-20 md:pt-24 pb-12 sm:pb-16 border-t border-navy-900/10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         
         {/* Memorable Closing Composition */}
@@ -17,11 +17,13 @@ export default function ClosingBrandStatement({ onOpenAudit, onOpenConcierge }) 
           {/* Supplied Exact Logo Image & Calligraphy */}
           <div className="flex flex-col items-center justify-center mb-6 sm:mb-8">
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Brand Logo — Perfumers & Perfumery"
               className="h-12 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-500 hover:scale-105"
             />
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.bismillah}
               alt="Bismillah ir-Rahman ir-Rahim"
               className="h-3 sm:h-4 md:h-5 w-auto object-contain mt-2 sm:mt-3 opacity-90"
@@ -41,7 +43,7 @@ export default function ClosingBrandStatement({ onOpenAudit, onOpenConcierge }) 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
             <button
               onClick={onOpenConcierge}
-              className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-7 py-3.5 sm:px-8 sm:py-4 rounded-sm hover:bg-navy-800 transition-all shadow-luxury hover:shadow-luxury-hover w-full sm:w-auto"
+              className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-7 py-3.5 sm:px-8 sm:py-4 rounded-sm hover:bg-navy-800 transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-luxury hover:shadow-luxury-hover w-full sm:w-auto"
             >
               <span>Inquire Private Atelier</span>
               <ArrowUpRight className="w-4 h-4" />

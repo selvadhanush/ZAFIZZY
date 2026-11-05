@@ -113,14 +113,17 @@ body {
 .btn-luxury-shimmer {
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .btn-luxury-shimmer::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
+  transform: translateX(-100%);
+  will-change: transform;
+  pointer-events: none;
   height: 100%;
   background: linear-gradient(
     90deg,
@@ -128,10 +131,10 @@ body {
     rgba(255, 255, 255, 0.25),
     transparent
   );
-  transition: left 0.75s ease;
+  transition: transform 0.75s ease;
 }
 .btn-luxury-shimmer:hover::before {
-  left: 100%;
+  transform: translateX(100%);
 }
 
 /* Reduced motion preference respect */
@@ -165,3 +168,4 @@ body {
 .hero-dark .bg-navy-900\/5 { background-color: rgba(237, 232, 224, 0.06); }
 .hero-dark .bg-ivory-warm\/40 { background-color: rgba(237, 232, 224, 0.05); }
 .hero-dark .btn-luxury-shimmer { color: #060606; }
+.hero-dark [class*="backdrop-blur"] { -webkit-backdrop-filter: none; backdrop-filter: none; }

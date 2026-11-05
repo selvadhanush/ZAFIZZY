@@ -62,7 +62,7 @@ export default function SignatureFragrance({ onInspectNotes }) {
     <section
       id="signature"
       ref={sectionRef}
-      className="relative py-14 sm:py-20 md:py-28 bg-white/70 backdrop-blur-[1px] overflow-hidden border-t border-navy-900/10"
+      className="relative py-14 sm:py-20 md:py-28 bg-white/70 overflow-hidden border-t border-navy-900/10"
     >
       {/* Background Ambience */}
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-mist-blue/25 rounded-full blur-3xl pointer-events-none" />
@@ -93,10 +93,11 @@ export default function SignatureFragrance({ onInspectNotes }) {
             
             <div
               ref={bottleWrapRef}
-              className="relative w-full max-w-md bg-ivory-warm/40 rounded-sm p-3.5 sm:p-6 border border-navy-900/10 shadow-luxury group"
+              className="will-change-transform relative w-full max-w-md bg-ivory-warm/40 rounded-sm p-3.5 sm:p-6 border border-navy-900/10 shadow-luxury group"
             >
               <div className="relative overflow-hidden rounded">
                 <img
+ decoding="async"
                   src={BRAND_IDENTITY.assets.signatureBottle}
                   alt="ZÄFIZZY Flacon Specimen"
                   className="w-full h-auto object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"

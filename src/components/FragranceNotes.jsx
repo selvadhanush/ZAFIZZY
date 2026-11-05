@@ -71,7 +71,7 @@ export default function FragranceNotes() {
                 <button
                   key={stage.key}
                   onClick={() => setActiveStage(stage.key)}
-                  className={`px-5 sm:px-8 py-2.5 rounded-full text-xs uppercase tracking-widest transition-all duration-300 font-medium ${
+                  className={`px-5 sm:px-8 py-2.5 rounded-full text-xs uppercase tracking-widest transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 font-medium ${
                     isActive
                       ? 'bg-navy-900 text-white shadow-sm'
                       : 'text-navy-muted hover:text-navy-900 hover:bg-navy-900/5'
@@ -106,7 +106,7 @@ export default function FragranceNotes() {
 
               {/* Dynamic Coordinate Marker Ring */}
               <div
-                className={`absolute inset-4 rounded pointer-events-none transition-all duration-500 border ${
+                className={`absolute inset-4 rounded pointer-events-none transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-500 border ${
                   activeStage === 'top'
                     ? 'border-navy-900/40 ring-4 ring-navy-900/5'
                     : activeStage === 'heart'
@@ -117,7 +117,7 @@ export default function FragranceNotes() {
 
               {/* Spatial Stage Anchor Badges */}
               <div
-                className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-navy-900 text-white text-[10px] tracking-widest font-mono uppercase rounded-full shadow-md transition-all duration-300 ${
+                className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-navy-900 text-white text-[10px] tracking-widest font-mono uppercase rounded-full shadow-md transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 ${
                   activeStage === 'top' ? 'scale-110 ring-2 ring-mist-blue' : 'opacity-70'
                 }`}
               >
@@ -125,7 +125,7 @@ export default function FragranceNotes() {
               </div>
 
               <div
-                className={`absolute top-1/2 -right-4 -translate-y-1/2 px-3 py-1 bg-white border border-navy-900/20 text-navy-900 text-[10px] tracking-widest font-mono uppercase rounded shadow-md transition-all duration-300 ${
+                className={`absolute top-1/2 -right-4 -translate-y-1/2 px-3 py-1 bg-white border border-navy-900/20 text-navy-900 text-[10px] tracking-widest font-mono uppercase rounded shadow-md transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 ${
                   activeStage === 'heart' ? 'scale-110 border-navy-900 font-semibold' : 'opacity-70'
                 }`}
               >
@@ -133,7 +133,7 @@ export default function FragranceNotes() {
               </div>
 
               <div
-                className={`absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-navy-950 text-white text-[10px] tracking-widest font-mono uppercase rounded-full shadow-md transition-all duration-300 ${
+                className={`absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-navy-950 text-white text-[10px] tracking-widest font-mono uppercase rounded-full shadow-md transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 ${
                   activeStage === 'base' ? 'scale-110 ring-2 ring-mist-blue' : 'opacity-70'
                 }`}
               >
@@ -180,7 +180,7 @@ export default function FragranceNotes() {
                   {currentData.accords.map((accord, i) => (
                     <div
                       key={accord.name}
-                      className="p-4 rounded bg-ivory-light border border-navy-900/5 hover:border-navy-900/20 transition-all group"
+                      className="p-4 rounded bg-ivory-light border border-navy-900/5 hover:border-navy-900/20 transition-[color,background-color,border-color,box-shadow,opacity,transform] group"
                     >
                       <div className="flex items-center gap-2 text-[10px] font-mono text-navy-muted mb-1">
                         <Droplet className="w-3 h-3 text-navy-800" />

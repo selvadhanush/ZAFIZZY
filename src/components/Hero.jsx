@@ -138,7 +138,7 @@ export default function Hero({ onDiscoverClick }) {
           <div ref={ctaRef} className="flex flex-wrap items-center gap-5">
             <button
               onClick={onDiscoverClick}
-              className="btn-luxury-shimmer group inline-flex items-center gap-4 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-8 py-4 rounded-sm hover:bg-navy-800 transition-all shadow-luxury hover:shadow-luxury-hover"
+              className="btn-luxury-shimmer group inline-flex items-center gap-4 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-8 py-4 rounded-sm hover:bg-navy-800 transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-luxury hover:shadow-luxury-hover"
             >
               <span>Discover the Flacon</span>
               <ArrowDownRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
@@ -199,7 +199,7 @@ export default function Hero({ onDiscoverClick }) {
               </div>
 
               {/* Verified Product Spec Floating Tag */}
-              <div className="absolute -bottom-4 -left-4 sm:left-2 bg-white/95 backdrop-blur-md border border-navy-900/10 p-3 sm:p-4 rounded shadow-lg max-w-[220px]">
+              <div className="absolute -bottom-4 -left-4 sm:left-2 bg-white/95 border border-navy-900/10 p-3 sm:p-4 rounded shadow-lg max-w-[220px]">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-navy-900 animate-pulse" />
                   <span className="text-[10px] tracking-widest-xl uppercase font-semibold text-navy-900">

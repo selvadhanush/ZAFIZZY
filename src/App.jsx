@@ -38,10 +38,10 @@ export default function App() {
 
       {/* Fixed Site Background (BG.png) — Stays completely fixed while scrolling */}
       <div
-        className="fixed inset-0 w-full h-full pointer-events-none bg-cover bg-center bg-no-repeat z-0"
+        className="fixed inset-0 w-full h-full pointer-events-none bg-cover bg-center bg-no-repeat z-0 transform-gpu"
         style={{
           backgroundImage: "url('/assets/BG.png')",
-          backgroundAttachment: 'fixed',
+          willChange: 'transform',
         }}
         aria-hidden="true"
       />

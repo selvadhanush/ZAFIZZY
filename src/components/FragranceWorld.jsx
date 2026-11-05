@@ -96,6 +96,7 @@ export default function FragranceWorld() {
             className="relative w-full min-h-[400px] sm:min-h-[480px] md:min-h-[560px] flex items-center justify-center overflow-hidden shadow-2xl border border-white/10 rounded"
           >
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.fragranceWorld}
               alt="ZÄFIZZY Fragrance World Campaign — Noble raw botanicals and coastal terroir"
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"

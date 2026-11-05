@@ -145,7 +145,7 @@ export default function ConciergeDrawer({ isOpen, onClose }) {
 
               <button
                 type="submit"
-                className="w-full btn-luxury-shimmer py-4 bg-navy-900 text-white text-xs uppercase tracking-widest-xl font-medium rounded-sm hover:bg-navy-800 transition-all shadow-md flex items-center justify-center gap-2 mt-4"
+                className="w-full btn-luxury-shimmer py-4 bg-navy-900 text-white text-xs uppercase tracking-widest-xl font-medium rounded-sm hover:bg-navy-800 transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-md flex items-center justify-center gap-2 mt-4"
               >
                 <span>Transmit Inquiry</span>
                 <Send className="w-3.5 h-3.5" />

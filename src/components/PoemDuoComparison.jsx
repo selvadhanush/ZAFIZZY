@@ -17,13 +17,23 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
   const [sliderPosition, setSliderPosition] = useState(50); // percentage 0 - 100
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef(null);
+  const pendingPos = useRef(50);
+  const moveRaf = useRef(0);
+
+  useEffect(() => () => cancelAnimationFrame(moveRaf.current), []);
 
   const handleMove = useCallback((clientX) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPosition(percentage);
+    pendingPos.current = percentage;
+    if (!moveRaf.current) {
+      moveRaf.current = requestAnimationFrame(() => {
+        moveRaf.current = 0;
+        setSliderPosition(pendingPos.current);
+      });
+    }
   }, []);
 
   // Mouse drag handlers
@@ -128,7 +138,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
         <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
           <button
             onClick={() => setSliderPosition(100)}
-            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-[color,background-color,border-color,box-shadow,opacity,transform] ${
               sliderPosition >= 85
                 ? 'bg-navy-950 text-white shadow-md'
                 : 'bg-white/80 text-navy-900/80 hover:bg-white hover:text-navy-950 border border-navy-900/10'
@@ -139,7 +149,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
 
           <button
             onClick={() => setSliderPosition(50)}
-            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-[color,background-color,border-color,box-shadow,opacity,transform] ${
               sliderPosition > 40 && sliderPosition < 60
                 ? 'bg-navy-950 text-white shadow-md'
                 : 'bg-white/80 text-navy-900/80 hover:bg-white hover:text-navy-950 border border-navy-900/10'
@@ -150,7 +160,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
 
           <button
             onClick={() => setSliderPosition(0)}
-            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm text-[10px] sm:text-xs font-mono uppercase tracking-widest transition-[color,background-color,border-color,box-shadow,opacity,transform] ${
               sliderPosition <= 15
                 ? 'bg-navy-950 text-white shadow-md'
                 : 'bg-white/80 text-navy-900/80 hover:bg-white hover:text-navy-950 border border-navy-900/10'
@@ -177,6 +187,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
           {/* BASE LAYER: POEM FOR HER (Brown Leather) */}
           <div className="absolute inset-0 w-full h-full">
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.poemForHer}
               alt="Poem For Her — Flacon on Saddle Leather"
               className="w-full h-full object-cover object-center pointer-events-none"
@@ -198,7 +209,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
                   e.stopPropagation();
                   handleBuyNow('Poem For Her');
                 }}
-                className="btn-luxury-shimmer bg-white text-navy-950 hover:bg-navy-950 hover:text-white px-5 sm:px-7 py-2 sm:py-2.5 rounded-[1px] text-[10px] sm:text-xs font-semibold uppercase tracking-widest-xl shadow-2xl border border-navy-950/20 transition-all cursor-pointer"
+                className="btn-luxury-shimmer bg-white text-navy-950 hover:bg-navy-950 hover:text-white px-5 sm:px-7 py-2 sm:py-2.5 rounded-[1px] text-[10px] sm:text-xs font-semibold uppercase tracking-widest-xl shadow-2xl border border-navy-950/20 transition-[color,background-color,border-color,box-shadow,opacity,transform] cursor-pointer"
               >
                 BUY NOW
               </button>
@@ -213,6 +224,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
             }}
           >
             <img
+ decoding="async"
               src={BRAND_IDENTITY.assets.poemForHim}
               alt="Poem For Him — Flacon on Obsidian Silk"
               className="w-full h-full object-cover object-center pointer-events-none"
@@ -234,7 +246,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
                   e.stopPropagation();
                   handleBuyNow('Poem For Him');
                 }}
-                className="btn-luxury-shimmer bg-white text-navy-950 hover:bg-navy-950 hover:text-white px-5 sm:px-7 py-2 sm:py-2.5 rounded-[1px] text-[10px] sm:text-xs font-semibold uppercase tracking-widest-xl shadow-2xl border border-navy-950/20 transition-all cursor-pointer"
+                className="btn-luxury-shimmer bg-white text-navy-950 hover:bg-navy-950 hover:text-white px-5 sm:px-7 py-2 sm:py-2.5 rounded-[1px] text-[10px] sm:text-xs font-semibold uppercase tracking-widest-xl shadow-2xl border border-navy-950/20 transition-[color,background-color,border-color,box-shadow,opacity,transform] cursor-pointer"
               >
                 BUY NOW
               </button>
@@ -281,7 +293,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
           {/* Card 1: For Him */}
           <div
             onClick={() => setSliderPosition(100)}
-            className={`p-5 sm:p-6 rounded-sm border transition-all duration-300 cursor-pointer ${
+            className={`p-5 sm:p-6 rounded-sm border transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 cursor-pointer ${
               sliderPosition >= 50
                 ? 'bg-navy-950 text-white border-navy-950 shadow-xl'
                 : 'bg-white/80 text-navy-950 border-navy-900/10 hover:border-navy-900/30'
@@ -306,7 +318,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
           {/* Card 2: For Her */}
           <div
             onClick={() => setSliderPosition(0)}
-            className={`p-5 sm:p-6 rounded-sm border transition-all duration-300 cursor-pointer ${
+            className={`p-5 sm:p-6 rounded-sm border transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 cursor-pointer ${
               sliderPosition < 50
                 ? 'bg-navy-950 text-white border-navy-950 shadow-xl'
                 : 'bg-white/80 text-navy-950 border-navy-900/10 hover:border-navy-900/30'
