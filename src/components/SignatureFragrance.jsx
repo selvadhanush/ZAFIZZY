@@ -27,7 +27,7 @@ export default function SignatureFragrance({ onInspectNotes }) {
             trigger: sectionRef.current,
             start: 'top 80%',
             end: 'bottom 20%',
-            scrub: 1.2,
+            scrub: 0.6,
           },
         }
       );

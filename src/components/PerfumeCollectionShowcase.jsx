@@ -12,8 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
  * 
  * Animation Mechanics:
  * As user scrolls down, perfume cards transition one by one:
- * - Current card glides from center to the RIGHT
- * - Next card enters from the LEFT and settles into the CENTER
+ * - Each card glides in from the left, rests at centre, then exits right
  * - Fully reversible upon upward scroll with zero jitter
  */
 export default function PerfumeCollectionShowcase() {
@@ -29,79 +28,44 @@ export default function PerfumeCollectionShowcase() {
       const cards = cardsRef.current;
       if (!cards || cards.length === 0) return;
 
-      // Initial positions:
-      // Card 0 at center
-      // Cards 1 and 2 waiting offscreen on the LEFT
-      gsap.set(cards[0], { xPercent: 0, opacity: 1, scale: 1, pointerEvents: 'auto' });
-      for (let i = 1; i < cards.length; i++) {
-        if (cards[i]) {
-          gsap.set(cards[i], { xPercent: -130, opacity: 0, scale: 0.92, pointerEvents: 'none' });
-        }
-      }
+      // Each card travels the full stage, scrubbed by scroll: enters from the LEFT edge,
+      // glides to the CENTRE, dwells, then exits to the RIGHT and fades out. Fully reversible.
+      const STEP = 2.2;   // timeline units between successive card entries
+      const TOTAL = STEP * (cards.length - 1) + 2.5;
+      cards.forEach((card) => {
+        if (card) gsap.set(card, { xPercent: -110, opacity: 0 });
+      });
 
-      // Master Scroll-Driven Pinning Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1.0,
+          scrub: 0.6,
           onUpdate: (self) => {
-            const p = self.progress;
-            if (p < 0.35) {
-              setActiveIndex(0);
-            } else if (p < 0.70) {
-              setActiveIndex(1);
-            } else {
-              setActiveIndex(2);
-            }
+            const t = self.progress * TOTAL;
+            const next = Math.min(cards.length - 1, Math.floor((t + 0.1) / STEP));
+            setActiveIndex((prev) => (prev !== next ? next : prev));
           },
         },
       });
 
-      // ─── Transition 1: Card 0 goes to RIGHT, Card 1 comes from LEFT to CENTER ───
-      tl.to({}, { duration: 0.25 }); // Initial dwell on Card 0
-
-      tl.to(cards[0], {
-        xPercent: 130,
-        opacity: 0,
-        scale: 0.92,
-        pointerEvents: 'none',
-        ease: 'power2.inOut',
-        duration: 1.0,
-      }, 0.25);
-
-      tl.to(cards[1], {
-        xPercent: 0,
-        opacity: 1,
-        scale: 1,
-        pointerEvents: 'auto',
-        ease: 'power2.inOut',
-        duration: 1.0,
-      }, 0.25);
-
-      tl.to({}, { duration: 0.35 }); // Dwell on Card 1
-
-      // ─── Transition 2: Card 1 goes to RIGHT, Card 2 comes from LEFT to CENTER ───
-      tl.to(cards[1], {
-        xPercent: 130,
-        opacity: 0,
-        scale: 0.92,
-        pointerEvents: 'none',
-        ease: 'power2.inOut',
-        duration: 1.0,
-      }, 1.6);
-
-      tl.to(cards[2], {
-        xPercent: 0,
-        opacity: 1,
-        scale: 1,
-        pointerEvents: 'auto',
-        ease: 'power2.inOut',
-        duration: 1.0,
-      }, 1.6);
-
-      tl.to({}, { duration: 0.35 }); // Final dwell on Card 2
+      cards.forEach((card, i) => {
+        if (!card) return;
+        const at = i * STEP;
+        // Enter: left end -> centre
+        tl.fromTo(card,
+          { xPercent: -110, opacity: 0 },
+          { xPercent: 0, opacity: 1, ease: 'power2.out', duration: 1.0, immediateRender: true },
+          at
+        );
+        // Exit: centre -> right, disappearing
+        tl.to(card,
+          { xPercent: 110, opacity: 0, ease: 'power2.in', duration: 1.0 },
+          at + 1.5
+        );
+      });
+      tl.to({}, { duration: 0 }, TOTAL); // pad timeline to TOTAL
     }, sectionRef);
 
     return () => ctx.revert();
@@ -280,7 +244,7 @@ export default function PerfumeCollectionShowcase() {
         <div className="max-w-4xl mx-auto w-full flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-navy-950/50 pt-1.5 sm:pt-2 border-t border-navy-900/10">
           <span>ZÄFIZZY ATELIER COLLECTIONS</span>
           <span className="hidden sm:inline tracking-wider">
-            SCROLL TO TRANSITION CARDS (LEFT ➔ CENTER ➔ RIGHT)
+            SCROLL: CARDS GLIDE LEFT ➔ CENTRE ➔ RIGHT
           </span>
           <span>HAUTE PARFUMERIE</span>
         </div>

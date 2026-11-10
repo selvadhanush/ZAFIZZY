@@ -78,7 +78,7 @@ export default function Hero({ onDiscoverClick }) {
       ref={heroRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-[92vh] lg:min-h-screen pt-28 pb-16 flex items-center justify-center bg-white overflow-hidden"
+      className="relative min-h-[92vh] lg:min-h-screen pt-40 sm:pt-44 lg:pt-52 pb-16 flex items-center justify-center bg-white overflow-hidden"
     >
       {/* 1. Subtle Background Light Field & Brand Pattern */}
       <div
@@ -103,18 +103,6 @@ export default function Hero({ onDiscoverClick }) {
         {/* Left Column: Brand Statement & Typography */}
         <div className="lg:col-span-6 z-10 flex flex-col justify-center text-left">
           
-          {/* Brand Identity Stamp */}
-          <div ref={brandBadgeRef} className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-px bg-navy-900/40" />
-            <span className="text-[11px] md:text-xs tracking-widest-2xl uppercase text-navy-muted font-medium">
-              {BRAND_IDENTITY.subheading}
-            </span>
-            <span className="text-[10px] text-navy-900/40 font-mono">/</span>
-            <span className="text-[11px] tracking-widest text-navy-900/60 font-serif italic">
-              {BRAND_IDENTITY.arabicScript}
-            </span>
-          </div>
-
           {/* Editorial Display Headline */}
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-light text-navy-900 leading-[1.08] tracking-tight mb-6">
             <span ref={titleLine1Ref} className="block overflow-hidden">

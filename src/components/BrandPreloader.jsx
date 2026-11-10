@@ -46,11 +46,13 @@ export default function BrandPreloader({ onLoaded }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#070E1B] text-white transition-all duration-800 select-none ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center text-white transition-all duration-800 select-none ${
         isFadingOut ? 'opacity-0 scale-[1.03] pointer-events-none' : 'opacity-100'
       }`}
       style={{
-        background: 'radial-gradient(circle at 50% 48%, #102344 0%, #0A162B 45%, #050B15 85%, #03070E 100%)',
+        backgroundImage: "url('/assets/BG.webp')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
       aria-label="Loading ZÄFIZZY Experience"
       role="status"
@@ -60,9 +62,6 @@ export default function BrandPreloader({ onLoaded }) {
         className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-cover bg-center"
         aria-hidden="true"
       />
-
-      {/* Atmospheric Ambient Light Field */}
-      <div className="absolute w-[700px] h-[700px] rounded-full blur-3xl transform-gpu bg-navy-800/35 pointer-events-none" />
 
       {/* Center Preloader Brand Composition (Matching Reference Layout) */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto">
@@ -77,29 +76,29 @@ export default function BrandPreloader({ onLoaded }) {
           <img
             src={BRAND_IDENTITY.assets.bismillah}
             alt="Bismillah ir-Rahman ir-Rahim"
-            className="h-4 sm:h-5 md:h-6 w-auto object-contain mt-2.5 sm:mt-3 brightness-0 invert opacity-95 drop-shadow-[0_2px_14px_rgba(255,255,255,0.4)]"
+            className="h-4 sm:h-5 md:h-6 w-auto object-contain mt-2.5 sm:mt-3 brightness-0 opacity-95"
           />
         </div>
 
         {/* Subtitle: Fragrances */}
-        <div className="text-xs sm:text-sm tracking-[0.3em] uppercase text-mist-blue/90 font-sans font-medium mb-2">
+        <div className="text-xs sm:text-sm tracking-[0.3em] uppercase text-black font-sans font-medium mb-2">
           Fragrances
         </div>
 
         {/* Tagline: Crafting scented stories */}
-        <div className="text-[10px] sm:text-xs tracking-[0.22em] text-mist-blue/60 font-mono mb-10 sm:mb-12">
+        <div className="text-[10px] sm:text-xs tracking-[0.22em] text-black/80 font-mono mb-10 sm:mb-12">
           Crafting scented stories
         </div>
 
         {/* Status: loading (No percentage numbers) */}
-        <div className="text-[10px] sm:text-xs tracking-[0.3em] font-mono text-mist-blue/75 uppercase mb-3">
+        <div className="text-[10px] sm:text-xs tracking-[0.3em] font-mono text-black uppercase mb-3">
           loading...
         </div>
 
         {/* Elegant Golden Progress Bar */}
-        <div className="relative w-64 sm:w-80 md:w-96 h-[1.5px] bg-gradient-to-r from-transparent via-white/15 to-transparent overflow-hidden rounded-full">
+        <div className="relative w-64 sm:w-80 md:w-96 h-[3px] bg-black/25 overflow-hidden rounded-full">
           <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-transparent via-amber-200 to-champagne transition-all duration-150 ease-out shadow-[0_0_10px_rgba(245,158,11,0.9)]"
+            className="absolute top-0 left-0 h-full bg-black transition-all duration-150 ease-out"
             style={{ width: `${displayProgress}%` }}
           />
         </div>

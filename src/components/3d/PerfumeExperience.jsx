@@ -14,21 +14,11 @@ gsap.registerPlugin(ScrollTrigger);
  * 2. GSAP timeline drives DOM overlay opacities and transforms with hardware acceleration
  * 3. Dedicated GPU opacity layer handles White-to-Navy transition with zero layout reflow
  */
-const STAGE_LABELS = [
-  'STAGE I: THE REVEAL',
-  'STAGE II: FLACON INSPECTION',
-  'STAGE III: OLFACTORY NOTES',
-  'STAGE IV: NOCTURNAL TERROIR',
-  'STAGE V: THE MASTERWORK',
-];
-
 export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const containerRef = useRef(null);
   const scrollProgressRef = useRef(0);
 
   // DOM Refs for direct hardware-accelerated animations (No React re-render thrashing)
-  const progressTextRef = useRef(null);
-  const stageTextRef = useRef(null);
   const scene1Ref = useRef(null);
   const pillarsRef = useRef(null);
   const scene2Ref = useRef(null);
@@ -50,34 +40,17 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         return;
       }
 
-      let lastPct = -1;
-      let lastStage = -1;
-
       // Master scroll timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.5,
+          scrub: 0.3,
           fastScrollEnd: true,
           onUpdate: (self) => {
             const p = self.progress;
             scrollProgressRef.current = p;
-
-            // Direct DOM percentage update (0 React re-renders) — only when the value changes
-            const pct = Math.round(p * 100);
-            if (pct !== lastPct && progressTextRef.current) {
-              lastPct = pct;
-              progressTextRef.current.textContent = `${pct}%`;
-            }
-
-            // Direct Stage Name Text — only when the stage changes
-            const stage = p < 0.22 ? 0 : p < 0.46 ? 1 : p < 0.70 ? 2 : p < 0.88 ? 3 : 4;
-            if (stage !== lastStage && stageTextRef.current) {
-              lastStage = stage;
-              stageTextRef.current.textContent = STAGE_LABELS[stage];
-            }
 
             // Discreet Note Switcher (Top, Heart, Base)
             if (p >= 0.46 && p < 0.54) {
@@ -192,19 +165,6 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
 
         {/* SYNCHRONIZED EDITORIAL OVERLAYS (Z-20) */}
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 sm:p-6 md:p-12">
-          
-          {/* Top Brand Indicator Bar */}
-          <div className="flex items-center justify-between text-[10px] sm:text-xs tracking-widest-xl sm:tracking-widest-2xl uppercase font-mono opacity-80 pt-16 sm:pt-14 md:pt-12">
-            <div className="flex items-center gap-2 text-navy-900">
-              <span className="w-2 h-2 rounded-full bg-navy-900 animate-pulse" />
-              <span>3D CHOREOGRAPHY // </span>
-              <span ref={progressTextRef} className="font-semibold font-mono">0%</span>
-            </div>
-            <div ref={stageTextRef} className="hidden sm:block font-mono text-navy-muted">
-              STAGE I: THE REVEAL
-            </div>
-          </div>
-
           {/* DYNAMIC SCENE CONTENT */}
 
           {/* SCENE 1: THE REVEAL */}
@@ -212,17 +172,6 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             ref={scene1Ref}
             className="will-change-transform max-w-xl self-start pointer-events-auto"
           >
-            <div className="flex items-center gap-2.5 mb-2 sm:mb-3">
-              <div className="w-8 sm:w-10 h-[1.5px] bg-navy-950/70" />
-              <span className="text-[10px] sm:text-xs tracking-widest-xl sm:tracking-widest-2xl uppercase text-navy-950 font-semibold font-mono">
-                {BRAND_IDENTITY.subheading}
-              </span>
-              <span className="text-xs text-navy-950/50 font-mono">/</span>
-              <span className="text-xs sm:text-sm font-serif font-semibold italic text-navy-950">
-                {BRAND_IDENTITY.arabicScript}
-              </span>
-            </div>
-
             <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-navy-950 leading-[1.12] sm:leading-[1.08] tracking-tight mb-4 sm:mb-6">
               THE ESSENCE OF <br />
               <span className="italic font-medium text-navy-950">ACQUIRED WORLDS.</span>

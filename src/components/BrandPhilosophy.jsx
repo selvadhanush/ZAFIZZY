@@ -49,7 +49,7 @@ export default function BrandPhilosophy() {
             trigger: cardsContainerRef.current || sectionRef.current,
             start: 'top 88%',
             end: 'top 32%',
-            scrub: 1, // Directly mapped to scroll progress
+            scrub: 0.6, // Directly mapped to scroll progress
             invalidateOnRefresh: true,
           },
         });
