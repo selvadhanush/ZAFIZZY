@@ -56,7 +56,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
   return (
     <>
       <header
-        className="fixed top-0 left-0 w-full z-50 bg-white border-b border-navy-900/10 py-3 shadow-sm"
+        className="fixed top-0 left-0 w-full z-50 bg-white border-b border-black/10 py-3 shadow-sm"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
           {/* Brand Identity / Logo & Calligraphy */}
@@ -170,13 +170,13 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
         onClick={() => setMobileMenuOpen(false)}
       >
         <div
-          className={`fixed top-0 right-0 w-5/6 max-w-sm h-full bg-white/95 backdrop-blur-md backdrop-saturate-150 border-l border-white/40 shadow-[0_8px_40px_rgba(10,22,43,0.25),inset_1px_0_0_rgba(255,255,255,0.6)] p-6 sm:p-8 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ${
+          className={`fixed top-0 right-0 w-5/6 max-w-sm h-full bg-gradient-to-b from-white/70 to-white/45 backdrop-blur-2xl backdrop-saturate-150 border-l border-white/60 shadow-[0_8px_40px_rgba(10,22,43,0.25),inset_1px_0_0_rgba(255,255,255,0.8)] p-6 sm:p-8 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div>
-            <div className="flex items-center justify-between pb-6 border-b border-navy-900/10">
+            <div className="flex items-center justify-between pb-6 border-b border-black/10">
               <div className="flex flex-col items-start">
                 <img
                   src={BRAND_IDENTITY.assets.logo}
@@ -201,7 +201,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
             <div className="mt-8 flex flex-col gap-6">
               {navLinks.map((link) =>
                 link.children ? (
-                  <div key={link.label} className="border-b border-navy-900/5">
+                  <div key={link.label} className="border-b border-black/10">
                     <span className="text-sm uppercase tracking-widest-xl text-black font-semibold py-2 block">
                       {link.label}
                     </span>
@@ -223,7 +223,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
                     key={link.label}
                     href={link.href || '#'}
                     onClick={(e) => handleNavClick(e, link)}
-                    className="text-sm uppercase tracking-widest-xl text-black font-semibold py-2 border-b border-navy-900/5 hover:text-black/60 transition-colors flex items-center justify-between"
+                    className="text-sm uppercase tracking-widest-xl text-black font-semibold py-2 border-b border-black/10 hover:text-black/60 transition-colors flex items-center justify-between"
                   >
                     <span>{link.label}</span>
                   </a>
@@ -232,7 +232,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
             </div>
           </div>
 
-          <div className="space-y-3 pt-6 border-t border-navy-900/10">
+          <div className="space-y-3 pt-6 border-t border-black/10">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
