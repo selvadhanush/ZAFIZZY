@@ -1,75 +1,31 @@
-import React, { useRef, useEffect, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sparkles, ArrowRight, Droplet, Clock, ShieldCheck, Compass } from 'lucide-react';
+import React, { useRef, useState, useCallback } from 'react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PERFUME_EDITIONS } from '../data/brandData';
 
-gsap.registerPlugin(ScrollTrigger);
-
 /**
- * Scroll-Driven Perfume Collection Showcase
- * Positioned right above 02 // ATELIER SPECIFICATIONS (The Flacon Architecture)
- * 
- * Animation Mechanics:
- * As user scrolls down, perfume cards transition one by one:
- * - Each card glides in from the left, rests at centre, then exits right
- * - Fully reversible upon upward scroll with zero jitter
+ * Curated Perfume Flacons — carousel
+ * Prev/next buttons, pagination dots, keyboard arrows and touch swipe.
  */
 export default function PerfumeCollectionShowcase() {
-  const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
+  const count = PERFUME_EDITIONS.length;
   const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartX = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) return;
+  const goTo = useCallback((i) => setActiveIndex(((i % count) + count) % count), [count]);
+  const prev = () => goTo(activeIndex - 1);
+  const next = () => goTo(activeIndex + 1);
 
-      const cards = cardsRef.current;
-      if (!cards || cards.length === 0) return;
-
-      // Each card travels the full stage, scrubbed by scroll: enters from the LEFT edge,
-      // glides to the CENTRE, dwells, then exits to the RIGHT and fades out. Fully reversible.
-      const STEP = 2.2;   // timeline units between successive card entries
-      const TOTAL = STEP * (cards.length - 1) + 2.5;
-      cards.forEach((card) => {
-        if (card) gsap.set(card, { xPercent: -110, opacity: 0 });
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.6,
-          onUpdate: (self) => {
-            const t = self.progress * TOTAL;
-            const next = Math.min(cards.length - 1, Math.floor((t + 0.1) / STEP));
-            setActiveIndex((prev) => (prev !== next ? next : prev));
-          },
-        },
-      });
-
-      cards.forEach((card, i) => {
-        if (!card) return;
-        const at = i * STEP;
-        // Enter: left end -> centre
-        tl.fromTo(card,
-          { xPercent: -110, opacity: 0 },
-          { xPercent: 0, opacity: 1, ease: 'power2.out', duration: 1.0, immediateRender: true },
-          at
-        );
-        // Exit: centre -> right, disappearing
-        tl.to(card,
-          { xPercent: 110, opacity: 0, ease: 'power2.in', duration: 1.0 },
-          at + 1.5
-        );
-      });
-      tl.to({}, { duration: 0 }, TOTAL); // pad timeline to TOTAL
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  };
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
+  };
 
   const scrollToExperience = () => {
     const el = document.getElementById('experience');
@@ -81,8 +37,7 @@ export default function PerfumeCollectionShowcase() {
   return (
     <section
       id="curated-editions"
-      ref={sectionRef}
-      className="relative w-full h-[320vh] bg-ivory-warm/30 border-t border-b border-navy-900/10"
+      className="relative w-full py-16 sm:py-24 bg-ivory-warm/30 border-t border-b border-navy-900/10"
     >
       {/* Subtle Pattern Overlay */}
       <div
@@ -90,8 +45,8 @@ export default function PerfumeCollectionShowcase() {
         aria-hidden="true"
       />
 
-      {/* STICKY FULLSCREEN VIEWPORT CONTAINER */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between py-4 sm:py-6 md:py-12 px-3 sm:px-6 md:px-12 z-10">
+      {/* CAROUSEL CONTAINER */}
+      <div className="w-full flex flex-col gap-6 sm:gap-8 px-3 sm:px-6 md:px-12 relative z-10">
         
         {/* Top Section Header */}
         <div className="max-w-4xl mx-auto w-full flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4">
@@ -112,17 +67,17 @@ export default function PerfumeCollectionShowcase() {
             <div className="flex items-center gap-1.5 font-mono text-xs text-navy-950 bg-white/80 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded border border-navy-900/10 shadow-sm">
               <span className="font-semibold text-navy-950">0{activeIndex + 1}</span>
               <span className="text-navy-950/40">/</span>
-              <span className="text-navy-950/60">03</span>
-              <span className="ml-2 text-[10px] tracking-wider uppercase text-navy-950/60 font-sans hidden sm:inline">
-                SCROLL TRANSITION
-              </span>
+              <span className="text-navy-950/60">0{count}</span>
             </div>
 
             {/* Pagination Dots */}
             <div className="flex items-center gap-1.5">
-              {[0, 1, 2].map((idx) => (
-                <span
+              {PERFUME_EDITIONS.map((_, idx) => (
+                <button
+                  type="button"
                   key={idx}
+                  onClick={() => goTo(idx)}
+                  aria-label={`Show flacon ${idx + 1}`}
                   className={`h-1.5 rounded-full transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300 ${
                     activeIndex === idx
                       ? 'w-6 bg-navy-950'
@@ -135,13 +90,26 @@ export default function PerfumeCollectionShowcase() {
         </div>
 
         {/* ─── Center Viewport: Horizontal Transitioning Cards Stack ─── */}
-        <div className="relative w-full max-w-4xl mx-auto h-[530px] sm:h-[490px] md:h-[490px] max-h-[76vh] flex items-center justify-center my-auto">
+        <div
+          className="relative w-full max-w-4xl mx-auto"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Curated Perfume Flacons"
+          tabIndex={0}
+          onKeyDown={onKeyDown}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="overflow-hidden rounded-sm h-[530px] sm:h-[490px] max-h-[80vh]">
+            <div
+              className="flex h-full transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
           {PERFUME_EDITIONS.map((perfume, idx) => (
             <div
               key={perfume.id}
-              ref={(el) => (cardsRef.current[idx] = el)}
-              className="absolute inset-0 w-full h-full bg-white/95 rounded-sm border border-navy-900/10 shadow-luxury p-3.5 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-3 sm:gap-6 md:gap-10 overflow-hidden"
-              style={{ willChange: 'transform, opacity' }}
+              aria-hidden={idx !== activeIndex}
+              className="w-full h-full shrink-0 bg-white/95 rounded-sm border border-navy-900/10 shadow-luxury p-3.5 sm:p-6 md:p-10 flex flex-col md:flex-row items-center gap-3 sm:gap-6 md:gap-10 overflow-hidden"
             >
               {/* Left Column: Flacon Visual & Accent Badge */}
               <div className="w-full md:w-5/12 h-24 sm:h-40 md:h-full relative flex items-center justify-center bg-gradient-to-b from-ivory-warm/60 to-mist-blue/20 rounded border border-navy-900/5 p-2 sm:p-4 overflow-hidden group shrink-0">
@@ -238,13 +206,32 @@ export default function PerfumeCollectionShowcase() {
               </div>
             </div>
           ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Previous flacon"
+            className="absolute left-1 sm:-left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-navy-950 text-white flex items-center justify-center shadow-lg hover:bg-navy-800 transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Next flacon"
+            className="absolute right-1 sm:-right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-navy-950 text-white flex items-center justify-center shadow-lg hover:bg-navy-800 transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Bottom Scroll Instruction Cue */}
+        {/* Bottom Cue */}
         <div className="max-w-4xl mx-auto w-full flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-navy-950/50 pt-1.5 sm:pt-2 border-t border-navy-900/10">
           <span>ZÄFIZZY ATELIER COLLECTIONS</span>
           <span className="hidden sm:inline tracking-wider">
-            SCROLL: CARDS GLIDE LEFT ➔ CENTRE ➔ RIGHT
+            SWIPE OR USE ARROWS TO BROWSE
           </span>
           <span>HAUTE PARFUMERIE</span>
         </div>

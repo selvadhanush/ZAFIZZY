@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import BrandPreloader from './components/BrandPreloader';
 import Navbar from './components/Navbar';
 import PerfumeExperience from './components/3d/PerfumeExperience';
@@ -11,13 +11,30 @@ import PatronReviews from './components/PatronReviews';
 import AtelierGazette from './components/AtelierGazette';
 import AtelierConsultationBanner from './components/AtelierConsultationBanner';
 import ClosingBrandStatement from './components/ClosingBrandStatement';
+import ProductsPage from './components/ProductsPage';
 import { BRAND_IDENTITY } from './data/brandData';
 
 // Modals remain lazy loaded on interaction
 const ConciergeDrawer = lazy(() => import('./components/ConciergeDrawer'));
 const BrandAuditModal = lazy(() => import('./components/BrandAuditModal'));
 
+// Tiny hash router: "#/collection/him|her|both" shows the products page, anything else is the home narrative.
+const parseRoute = () => {
+  const m = window.location.hash.match(/^#\/collection(?:\/(him|her|both))?/);
+  return m ? (m[1] || 'both') : null;
+};
+
 export default function App() {
+  const [audience, setAudience] = useState(parseRoute);
+  useEffect(() => {
+    const onHash = () => {
+      setAudience(parseRoute());
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
   const [auditOpen, setAuditOpen] = useState(false);
   const [conciergeOpen, setConciergeOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -52,7 +69,11 @@ export default function App() {
         onOpenConcierge={() => setConciergeOpen(true)}
       />
 
-      {/* Main Single-Page Narrative Flow */}
+      {audience ? (
+        <main id="main-content" className="relative z-10 flex-grow">
+          <ProductsPage audience={audience} onOpenConcierge={() => setConciergeOpen(true)} />
+        </main>
+      ) : (
       <main id="main-content" className="relative z-10 flex-grow">
         
         {/* 1. Master Real-Time 3D Scroll-Driven Storytelling Experience */}
@@ -87,6 +108,7 @@ export default function App() {
         {/* 7. Private Olfactory Consultation & Bespoke Commissioning Banner */}
         <AtelierConsultationBanner onOpenConcierge={() => setConciergeOpen(true)} />
       </main>
+      )}
 
       {/* 8. Closing Brand Statement & Editorial Footer */}
       <ClosingBrandStatement

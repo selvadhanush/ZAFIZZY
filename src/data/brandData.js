@@ -47,28 +47,6 @@ export const FRAGRANCE_DATA = {
         { name: "Pink Peppercorn", origin: "Madagascar", note: "Spicy, tingling, vibrant" }
       ]
     },
-    heart: {
-      title: "Heart Notes",
-      phase: "20 Min — 4 Hours",
-      theme: "The Architectural Core",
-      description: "A stately, powdery floral spine of majestic Tuscan iris, enveloped in wild lavender and velvety orris.",
-      accords: [
-        { name: "Tuscan Blue Iris Concrete", origin: "Florence, Italy", note: "Powdery, noble, aristocratic" },
-        { name: "Haute Provence Lavender", origin: "Valensole Plateau", note: "Aromatic, calming, silvered" },
-        { name: "Orris Root Resinoid", origin: "Aged 3 Years", note: "Buttery, suede-like, textured" }
-      ]
-    },
-    base: {
-      title: "Base Notes",
-      phase: "4 — 16+ Hours",
-      theme: "The Deep Midnight Sillage",
-      description: "A dark, hypnotic foundation of oceanic ambergris, smoked royal cedarwood, and clean earthen vetiver.",
-      accords: [
-        { name: "White Oceanic Ambergris", origin: "Sustainably Gathered", note: "Warm, animalic, radiant skin scent" },
-        { name: "Atlas Royal Cedarwood", origin: "Moroccan Atlas", note: "Smoky, architectural, dry" },
-        { name: "Haitian Vetiver", origin: "Les Cayes", note: "Rooted, smoky-green, earthy" }
-      ]
-    }
   }
 };
 
@@ -90,33 +68,6 @@ export const PHILOSOPHY_PILLARS = [
     title: "The Silent Sillage",
     subtitle: "Intimate Presence",
     description: "True luxury never screams for attention. ZÄFIZZY creates a private aura that lingers softly on the skin, leaving an indelible memory of elegance in every room you enter."
-  }
-];
-
-export const HERO_PILLARS = [
-  {
-    code: "01",
-    title: "Grasse Terroir",
-    category: "BOTANICAL HARVEST",
-    description: "Cold-harvested petals collected during dawn's maritime mist window for uncompromised molecular potency."
-  },
-  {
-    code: "02",
-    title: "Supercritical CO₂",
-    category: "ATELIER EXTRACTION",
-    description: "Zero thermal degradation extraction capturing the pure living botanical essence in pristine clarity."
-  },
-  {
-    code: "03",
-    title: "28% Extrait",
-    category: "CONCENTRATION",
-    description: "Highest haute perfumery tier formulated for intimate architectural sillage lasting 14+ hours."
-  },
-  {
-    code: "04",
-    title: "Crystal Flacon",
-    category: "GLASS CRAFTSMANSHIP",
-    description: "Heavy crown crystal with solid Glace d'Eau base, brushed slate metal cap, and platinum accents."
   }
 ];
 

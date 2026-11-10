@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ShieldCheck, Droplet, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, ArrowUpRight } from 'lucide-react';
 import HeroFrameSequence from './HeroFrameSequence';
-import { BRAND_IDENTITY, FRAGRANCE_DATA, HERO_PILLARS } from '../../data/brandData';
+import { BRAND_IDENTITY } from '../../data/brandData';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,14 +19,9 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const scrollProgressRef = useRef(0);
 
   // DOM Refs for direct hardware-accelerated animations (No React re-render thrashing)
-  const scene1Ref = useRef(null);
-  const pillarsRef = useRef(null);
-  const scene2Ref = useRef(null);
-  const scene3Ref = useRef(null);
   const scene4Ref = useRef(null);
   const scene5Ref = useRef(null);
 
-  const [activeNoteStage, setActiveNoteStage] = useState('top');
   const [reducedMotion] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   );
@@ -52,77 +47,28 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             const p = self.progress;
             scrollProgressRef.current = p;
 
-            // Discreet Note Switcher (Top, Heart, Base)
-            if (p >= 0.46 && p < 0.54) {
-              setActiveNoteStage((prev) => (prev !== 'top' ? 'top' : prev));
-            } else if (p >= 0.54 && p < 0.62) {
-              setActiveNoteStage((prev) => (prev !== 'heart' ? 'heart' : prev));
-            } else if (p >= 0.62 && p < 0.70) {
-              setActiveNoteStage((prev) => (prev !== 'base' ? 'base' : prev));
-            }
           },
         },
       });
 
-      // ─── Choreographed GSAP Transitions Across the 5 Scenes ───
-
-      // SCENE 1: Headline visible at start, fades up & out as pillars rise
-      tl.fromTo(scene1Ref.current, { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.16, ease: 'power2.inOut' }, 0.08);
-
-      // 4 HERO PILLAR CARDS (Inspired directly by reference video 00:03-00:06):
-      // Slide up from bottom over the pinned bottle, pause, then fade out
-      tl.fromTo(pillarsRef.current,
-        { opacity: 0, y: 70 },
-        { opacity: 1, y: 0, duration: 0.10, ease: 'power2.out' },
-        0.09
-      );
-      tl.to(pillarsRef.current,
-        { opacity: 0, y: -30, duration: 0.08, ease: 'power2.in' },
-        0.20
-      );
-
-      // SCENE 2: 360° Inspection Card
-      tl.fromTo(scene2Ref.current,
-        { opacity: 0, x: 40 },
-        { opacity: 1, x: 0, duration: 0.10, ease: 'power2.out' },
-        0.23
-      );
-      tl.to(scene2Ref.current,
-        { opacity: 0, x: -30, duration: 0.08, ease: 'power2.in' },
-        0.42
-      );
-
-      // SCENE 3: Olfactory Notes Macro Card
-      tl.fromTo(scene3Ref.current,
-        { opacity: 0, x: 40 },
-        { opacity: 1, x: 0, duration: 0.10, ease: 'power2.out' },
-        0.46
-      );
-      tl.to(scene3Ref.current,
-        { opacity: 0, x: -30, duration: 0.08, ease: 'power2.in' },
-        0.68
-      );
+      // ─── Choreographed GSAP Transitions Across the Remaining Scenes ───
 
       // SCENE 4: Nocturnal Terroir Text
       tl.fromTo(scene4Ref.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.10, ease: 'power2.out' },
-        0.71
+        0.23
       );
       tl.to(scene4Ref.current,
         { opacity: 0, y: -30, duration: 0.08, ease: 'power2.in' },
-        0.85
+        0.42
       );
 
-      // SCENE 5: The Final Masterwork Settle (Pure white studio framing)
+      // Keep the closing brand statement visible through the end of the scroll.
       tl.fromTo(scene5Ref.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.08, ease: 'power2.out' },
-        0.88
-      );
-      tl.to(scene5Ref.current,
-        { opacity: 0, y: -20, duration: 0.03, ease: 'power2.in' },
-        0.97
+        0.46
       );
 
       // Global ScrollTrigger measurement refresh
@@ -167,134 +113,10 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 sm:p-6 md:p-12">
           {/* DYNAMIC SCENE CONTENT */}
 
-          {/* SCENE 1: THE REVEAL */}
-          <div
-            ref={scene1Ref}
-            className="will-change-transform max-w-xl self-start pointer-events-auto"
-          >
-            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-navy-950 leading-[1.12] sm:leading-[1.08] tracking-tight mb-4 sm:mb-6">
-              THE ESSENCE OF <br />
-              <span className="italic font-medium text-navy-950">ACQUIRED WORLDS.</span>
-            </h1>
-
-            <p className="text-navy-900 text-xs sm:text-sm md:text-base font-normal leading-relaxed max-w-md mb-6 sm:mb-8">
-              A bespoke architectural fragrance that bridges luminous botanical awakening and deep midnight sillage.
-            </p>
-
-            <div className="flex items-center gap-2.5 text-[10px] sm:text-xs tracking-widest uppercase text-navy-950 font-semibold">
-              <span className="animate-bounce">↓</span>
-              <span>Scroll to Begin 3D Flacon Exploration</span>
-            </div>
-          </div>
-
-          {/* 4 HERO PILLAR CARDS (Directly inspired by reference video 00:03-00:06) */}
-          <div
-            ref={pillarsRef}
-            className="will-change-transform w-full self-center pointer-events-auto opacity-0"
-          >
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 max-w-6xl mx-auto">
-              {HERO_PILLARS.map((pillar) => (
-                <div
-                  key={pillar.code}
-                  className="bg-white/90 p-3 sm:p-5 rounded-sm border border-navy-900/10 shadow-luxury hover:border-navy-900/30 transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-300"
-                >
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-navy-muted uppercase mb-1.5 sm:mb-2">
-                    <span>{pillar.code} //</span>
-                    <span>{pillar.category}</span>
-                  </div>
-                  <h3 className="font-serif text-xs sm:text-base lg:text-lg text-navy-900 font-medium mb-1">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-[10px] sm:text-xs text-navy-muted/90 font-light leading-relaxed line-clamp-2 sm:line-clamp-none">
-                    {pillar.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* SCENE 2: THE 360° INSPECTION */}
-          <div
-            ref={scene2Ref}
-            className="will-change-transform max-w-sm sm:max-w-md self-center sm:self-end text-center sm:text-right pointer-events-auto opacity-0"
-          >
-            <span className="text-[10px] font-mono tracking-widest uppercase text-navy-muted block mb-1.5 sm:mb-2">
-              02 // THREE-DIMENSIONAL TURNTABLE
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-navy-900 font-light mb-2.5 sm:mb-4">
-              Crystalline Facets & Luminous Essence
-            </h2>
-            <p className="text-navy-muted text-xs sm:text-sm font-light leading-relaxed mb-4 sm:mb-6">
-              Rotated gracefully in real-time space as you scroll. The hand-beveled optical crystal glass captures natural refraction, encasing the rich amber-brown alcohol perfume essence and brushed midnight navy cap.
-            </p>
-            <div className="p-3 sm:p-4 bg-white/95 border border-navy-900/10 rounded inline-block text-left text-[10px] sm:text-[11px] text-navy-900 font-mono space-y-1 sm:space-y-1.5 shadow-luxury w-full sm:w-auto">
-              <div>FLACON: Optical Crystal Glass (IOR 1.52)</div>
-              <div>LIQUID: Aged Amber-Brown Alcohol Extrait (Full Capacity)</div>
-              <div>BASE: Solid Crystal "Glace d'Eau" Foundation</div>
-              <div>CAP: Brushed Midnight Navy Metal & Chrome Bevel</div>
-              <div>EMBLEM: Applied ZÄFIZZY Brand Silkscreen</div>
-            </div>
-          </div>
-
-          {/* SCENE 3: OLFACTORY NOTES CHOREOGRAPHY */}
-          <div
-            ref={scene3Ref}
-            className="will-change-transform max-w-sm sm:max-w-md lg:max-w-lg self-center sm:self-end w-full pointer-events-auto opacity-0"
-          >
-            <div className="bg-white/95 p-4 sm:p-6 md:p-7 rounded-sm border border-navy-900/10 shadow-luxury">
-              {/* Note Stage Tabs */}
-              <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-navy-900/10 mb-3 sm:mb-4">
-                <div className="flex items-center gap-2 sm:gap-2.5">
-                  <Droplet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-navy-900" />
-                  <span className="text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-navy-900">
-                    {FRAGRANCE_DATA.notesPyramid[activeNoteStage].title}
-                  </span>
-                </div>
-                <span className="text-[9px] sm:text-[10px] font-mono text-navy-muted uppercase">
-                  {FRAGRANCE_DATA.notesPyramid[activeNoteStage].phase}
-                </span>
-              </div>
-
-              {/* Stage Switcher Controls */}
-              <div className="flex gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                {['top', 'heart', 'base'].map((stg) => (
-                  <button
-                    key={stg}
-                    onClick={() => setActiveNoteStage(stg)}
-                    className={`px-2.5 sm:px-3 py-1 rounded text-[9px] sm:text-[10px] uppercase tracking-wider font-mono transition-colors ${
-                      activeNoteStage === stg
-                        ? 'bg-navy-900 text-white font-medium'
-                        : 'bg-navy-900/5 text-navy-muted hover:text-navy-900'
-                    }`}
-                  >
-                    {stg.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-
-              <p className="text-[11px] sm:text-xs text-navy-muted font-light mb-3 sm:mb-4 leading-relaxed">
-                {FRAGRANCE_DATA.notesPyramid[activeNoteStage].description}
-              </p>
-
-              {/* Accords Grid */}
-              <div className="space-y-1.5 sm:space-y-2.5">
-                {FRAGRANCE_DATA.notesPyramid[activeNoteStage].accords.map((accord) => (
-                  <div key={accord.name} className="p-2 sm:p-2.5 bg-ivory-warm/40 rounded border border-navy-900/5 flex items-center justify-between">
-                    <div>
-                      <strong className="text-[11px] sm:text-xs text-navy-900 font-serif block">{accord.name}</strong>
-                      <span className="text-[9px] sm:text-[10px] text-navy-muted/80 italic">"{accord.note}"</span>
-                    </div>
-                    <span className="text-[9px] sm:text-[10px] text-navy-muted font-mono">{accord.origin}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* SCENE 4: ATMOSPHERIC TERROIR TRANSITION */}
           <div
             ref={scene4Ref}
-            className="will-change-transform max-w-xl self-start pointer-events-auto opacity-0"
+            className="will-change-transform mt-8 max-w-xl self-start pointer-events-auto opacity-0"
           >
             <span className="text-[10px] font-mono tracking-widest uppercase text-mist-blue block mb-1.5 sm:mb-2">
               04 // NOCTURNAL TERROIR
