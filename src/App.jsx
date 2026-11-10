@@ -12,6 +12,7 @@ import AtelierGazette from './components/AtelierGazette';
 import AtelierConsultationBanner from './components/AtelierConsultationBanner';
 import ClosingBrandStatement from './components/ClosingBrandStatement';
 import ProductsPage from './components/ProductsPage';
+import AboutPage from './components/AboutPage';
 import { BRAND_IDENTITY } from './data/brandData';
 
 // Modals remain lazy loaded on interaction
@@ -20,6 +21,7 @@ const BrandAuditModal = lazy(() => import('./components/BrandAuditModal'));
 
 // Tiny hash router: "#/collection/him|her|both" shows the products page, anything else is the home narrative.
 const parseRoute = () => {
+  if (window.location.hash === '#/about') return 'about';
   const m = window.location.hash.match(/^#\/collection(?:\/(him|her|both))?/);
   return m ? (m[1] || 'both') : null;
 };
@@ -71,7 +73,11 @@ export default function App() {
 
       {audience ? (
         <main id="main-content" className="relative z-10 flex-grow">
-          <ProductsPage audience={audience} onOpenConcierge={() => setConciergeOpen(true)} />
+          {audience === 'about' ? (
+            <AboutPage onOpenConcierge={() => setConciergeOpen(true)} />
+          ) : (
+            <ProductsPage audience={audience} onOpenConcierge={() => setConciergeOpen(true)} />
+          )}
         </main>
       ) : (
       <main id="main-content" className="relative z-10 flex-grow">

@@ -19,7 +19,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
       ],
     },
     { label: "Contact", action: "contact" },
-    { label: "About Us", href: "#philosophy" },
+    { label: "About Us", route: "#/about" },
   ];
 
   const handleNavClick = (e, link) => {
@@ -120,7 +120,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
               ) : (
                 <a
                   key={link.label}
-                  href={link.href || '#'}
+                  href={link.route || link.href || '#'}
                   onClick={(e) => handleNavClick(e, link)}
                   className="text-xs uppercase tracking-widest-xl text-navy-900/80 hover:text-navy-900 transition-colors relative py-1 group"
                 >
@@ -221,7 +221,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
                 ) : (
                   <a
                     key={link.label}
-                    href={link.href || '#'}
+                    href={link.route || link.href || '#'}
                     onClick={(e) => handleNavClick(e, link)}
                     className="text-sm uppercase tracking-widest-xl text-black font-semibold py-2 border-b border-black/10 hover:text-black/60 transition-colors flex items-center justify-between"
                   >
