@@ -65,7 +65,7 @@ export default function SignatureFragrance({ onInspectNotes }) {
       className="relative py-14 sm:py-20 md:py-28 bg-white/70 overflow-hidden border-t border-navy-900/10"
     >
       {/* Background Ambience */}
-      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-mist-blue/25 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-mist-blue/25 rounded-full blur-3xl transform-gpu pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         

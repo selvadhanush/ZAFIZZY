@@ -19,10 +19,9 @@ export default function FragranceWorld() {
       // Scroll-based image frame expansion from masked/cropped to full luxury aspect
       gsap.fromTo(
         imageFrameRef.current,
-        { scale: 0.94, borderRadius: '20px', opacity: 0.85 },
+        { scale: 0.94, opacity: 0.85 },
         {
           scale: 1,
-          borderRadius: '4px',
           opacity: 1,
           duration: 1,
           ease: 'power2.out',
@@ -64,12 +63,12 @@ export default function FragranceWorld() {
     >
       {/* Brand Signature Pattern Sheet overlay on dark navy */}
       <div
-        className="absolute inset-0 bg-brand-pattern opacity-[0.06] mix-blend-screen pointer-events-none bg-cover bg-center"
+        className="absolute inset-0 bg-brand-pattern opacity-[0.06] pointer-events-none bg-cover bg-center"
         aria-hidden="true"
       />
 
       {/* Atmospheric Soft Lighting Field */}
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-navy-800/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-navy-800/40 rounded-full blur-3xl transform-gpu pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         
@@ -106,7 +105,7 @@ export default function FragranceWorld() {
             <div className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/35 to-navy-950/40 pointer-events-none" />
 
             {/* Centered Floating Luxury Card (Inspired by 00:11-00:15) */}
-            <div className="relative z-10 max-w-xl mx-3 sm:mx-auto bg-white/95 text-navy-900 backdrop-blur-md p-5 sm:p-8 md:p-10 rounded-sm shadow-2xl border border-white/40 text-center">
+            <div className="relative z-10 max-w-xl mx-3 sm:mx-auto bg-white/95 text-navy-900 p-5 sm:p-8 md:p-10 rounded-sm shadow-2xl border border-white/40 text-center">
               {/* Monogram emblem */}
               <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-3 sm:mb-4 flex items-center justify-center text-navy-900">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">

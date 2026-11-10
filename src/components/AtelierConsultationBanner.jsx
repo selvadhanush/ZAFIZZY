@@ -52,7 +52,7 @@ export default function AtelierConsultationBanner({ onOpenConcierge }) {
  decoding="async"
               src={BRAND_IDENTITY.assets.fragranceWorld}
               alt="ZÄFIZZY Botanical Terroir"
-              className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity"
+              className="absolute inset-0 w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/60 to-navy-950/40 pointer-events-none" />
 
@@ -75,7 +75,7 @@ export default function AtelierConsultationBanner({ onOpenConcierge }) {
           <div className="lg:col-span-7 bg-navy-900 text-white p-6 sm:p-10 md:p-14 flex flex-col justify-between relative">
             {/* Background Pattern Sheen */}
             <div
-              className="absolute inset-0 bg-brand-pattern opacity-10 mix-blend-screen pointer-events-none bg-cover bg-center"
+              className="absolute inset-0 bg-brand-pattern opacity-10 pointer-events-none bg-cover bg-center"
               aria-hidden="true"
             />
 

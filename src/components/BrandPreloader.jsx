@@ -57,12 +57,12 @@ export default function BrandPreloader({ onLoaded }) {
     >
       {/* Subtle Brand Pattern Sheet Overlay */}
       <div
-        className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-screen"
+        className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-cover bg-center"
         aria-hidden="true"
       />
 
       {/* Atmospheric Ambient Light Field */}
-      <div className="absolute w-[700px] h-[700px] rounded-full blur-3xl bg-navy-800/35 pointer-events-none" />
+      <div className="absolute w-[700px] h-[700px] rounded-full blur-3xl transform-gpu bg-navy-800/35 pointer-events-none" />
 
       {/* Center Preloader Brand Composition (Matching Reference Layout) */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto">

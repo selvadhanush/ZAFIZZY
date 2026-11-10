@@ -122,7 +122,7 @@ export default function PerfumeCollectionShowcase() {
     >
       {/* Subtle Pattern Overlay */}
       <div
-        className="absolute inset-0 bg-brand-pattern opacity-[0.035] mix-blend-multiply pointer-events-none bg-center bg-cover"
+        className="absolute inset-0 bg-brand-pattern opacity-[0.035] pointer-events-none bg-center bg-cover"
         aria-hidden="true"
       />
 

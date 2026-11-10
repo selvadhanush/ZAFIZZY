@@ -36,30 +36,55 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement);
 
-    // Progressive loading: every 8th frame first, then fill the gaps.
+    // Compressed frames are kept as Blobs (~5 MB total). Only a small window of decoded
+    // ImageBitmaps (+ sparse keyframes) lives in memory instead of 239 x 3.7 MB.
+    const blobs = new Array(FRAME_COUNT).fill(null);
+    const bitmaps = new Array(FRAME_COUNT).fill(null);
+    const pending = new Set();
+    const KEY_STEP = 8;
+    const WINDOW = 10;
+
     const order = [];
-    for (let i = 0; i < FRAME_COUNT; i += 8) order.push(i);
-    for (let i = 0; i < FRAME_COUNT; i++) if (i % 8 !== 0) order.push(i);
+    for (let i = 0; i < FRAME_COUNT; i += KEY_STEP) order.push(i);
+    for (let i = 0; i < FRAME_COUNT; i++) if (i % KEY_STEP !== 0) order.push(i);
     let cursor = 0;
+    const decode = (idx) => {
+      if (bitmaps[idx] || pending.has(idx) || !blobs[idx]) return;
+      pending.add(idx);
+      createImageBitmap(blobs[idx]).then((bmp) => {
+        pending.delete(idx);
+        if (cancelled) { bmp.close(); return; }
+        bitmaps[idx] = bmp;
+        lastDrawn = -1;
+        kick();
+      }, () => pending.delete(idx));
+    };
     const loadNext = () => {
       if (cancelled || cursor >= order.length) return;
       const idx = order[cursor++];
-      const img = new Image();
-      img.decoding = 'async';
-      img.onload = () => {
-        // Pre-decode off the main thread so the first draw of a frame never janks
-        const done = () => { frames[idx] = img; lastDrawn = -1; loadNext(); };
-        if (img.decode) img.decode().then(done, done); else done();
-      };
-      img.onerror = loadNext;
-      img.src = FRAME_SRC(idx);
+      fetch(FRAME_SRC(idx))
+        .then((r) => r.blob())
+        .then((b) => {
+          blobs[idx] = b;
+          if (idx % KEY_STEP === 0) decode(idx);
+          loadNext();
+        })
+        .catch(loadNext);
     };
     for (let k = 0; k < 4; k++) loadNext(); // 4 parallel loaders
 
+    const updateWindow = (idx) => {
+      for (let i = 0; i < FRAME_COUNT; i++) {
+        const inWin = Math.abs(i - idx) <= WINDOW;
+        if (inWin) decode(i);
+        else if (bitmaps[i] && i % KEY_STEP !== 0) { bitmaps[i].close(); bitmaps[i] = null; }
+      }
+    };
+
     const nearest = (idx) => {
       for (let d = 0; d < FRAME_COUNT; d++) {
-        if (frames[idx - d]) return frames[idx - d];
-        if (frames[idx + d]) return frames[idx + d];
+        if (bitmaps[idx - d]) return bitmaps[idx - d];
+        if (bitmaps[idx + d]) return bitmaps[idx + d];
       }
       return null;
     };
@@ -67,8 +92,8 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
     const draw = (idx) => {
       const img = nearest(idx);
       if (!img) return;
-      const iw = img.naturalWidth;
-      const ih = img.naturalHeight;
+      const iw = img.width;
+      const ih = img.height;
       // Cover on landscape; on narrow portrait screens cap the scale so the bottle isn't oversized.
       const scale = Math.min(Math.max(w / iw, h / ih), (w * 2.4) / iw);
       const dw = iw * scale;
@@ -78,35 +103,37 @@ export default function HeroFrameSequence({ scrollProgressRef }) {
       ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
     };
 
-    // Don't burn frames while the hero is off-screen or the tab is hidden
+    // Don't burn frames while the hero is off-screen, the tab is hidden, or the scroll has settled
     let visible = true;
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      if (visible && !raf && !cancelled) raf = requestAnimationFrame(tick);
-    });
+    let lastWindowIdx = -99;
+    function kick() { if (visible && !raf && !cancelled) raf = requestAnimationFrame(tick); }
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); });
     io.observe(canvas);
+    window.addEventListener('scroll', kick, { passive: true });
 
-    const tick = () => {
+    function tick() {
       raf = 0;
-      if (!visible || cancelled) return;
+      if (!visible || cancelled || document.hidden) return;
       const target = Math.min(1, Math.max(0, scrollProgressRef.current || 0)) * (FRAME_COUNT - 1);
       current += (target - current) * 0.18;
       if (Math.abs(target - current) < 0.01) current = target;
       const idx = Math.round(current);
+      if (Math.abs(idx - lastWindowIdx) >= 3) { lastWindowIdx = idx; updateWindow(idx); }
       if (idx !== lastDrawn) {
         draw(idx);
         lastDrawn = idx;
       }
-      // Keep running only while still easing or while scroll position is changing
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
+      if (current !== target) raf = requestAnimationFrame(tick); // idle once settled
+    }
+    kick();
 
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
+      window.removeEventListener('scroll', kick);
+      bitmaps.forEach((b) => b && b.close());
     };
   }, [scrollProgressRef]);
 

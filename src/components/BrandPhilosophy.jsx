@@ -88,7 +88,7 @@ export default function BrandPhilosophy() {
     >
       {/* Subtle Pattern Sheet Overlay from BG.png */}
       <div
-        className="absolute inset-0 bg-brand-pattern opacity-[0.04] mix-blend-multiply pointer-events-none bg-center bg-cover"
+        className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-center bg-cover"
         aria-hidden="true"
       />
 
@@ -169,7 +169,7 @@ export default function BrandPhilosophy() {
 
         {/* Brand Quote Callout */}
         <div className="mt-12 sm:mt-20 p-6 sm:p-12 bg-navy-900 text-white rounded-sm relative overflow-hidden shadow-luxury">
-          <div className="absolute right-0 top-0 w-96 h-full bg-brand-pattern opacity-10 mix-blend-screen bg-cover bg-right pointer-events-none" />
+          <div className="absolute right-0 top-0 w-96 h-full bg-brand-pattern opacity-10 bg-cover bg-right pointer-events-none" />
           
           <div className="relative z-10 max-w-3xl">
             <span className="text-[10px] uppercase tracking-widest-xl sm:tracking-widest-2xl text-mist-blue font-semibold block mb-2 sm:mb-3">
