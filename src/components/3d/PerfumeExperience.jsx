@@ -1,9 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ShieldCheck, ArrowUpRight } from 'lucide-react';
 import HeroFrameSequence from './HeroFrameSequence';
-import { BRAND_IDENTITY } from '../../data/brandData';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,10 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
   const containerRef = useRef(null);
   const scrollProgressRef = useRef(0);
-
-  // DOM Refs for direct hardware-accelerated animations (No React re-render thrashing)
-  const scene4Ref = useRef(null);
-  const scene5Ref = useRef(null);
+  const leftPanelRef = useRef(null);
 
   const [reducedMotion] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -53,22 +48,11 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
 
       // ─── Choreographed GSAP Transitions Across the Remaining Scenes ───
 
-      // SCENE 4: Nocturnal Terroir Text
-      tl.fromTo(scene4Ref.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.10, ease: 'power2.out' },
-        0.23
-      );
-      tl.to(scene4Ref.current,
-        { opacity: 0, y: -30, duration: 0.08, ease: 'power2.in' },
-        0.42
-      );
-
-      // Keep the closing brand statement visible through the end of the scroll.
-      tl.fromTo(scene5Ref.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.08, ease: 'power2.out' },
-        0.46
+      // Left editorial panel: visible at the start, fades up and out as the bottle sequence begins
+      tl.fromTo(leftPanelRef.current,
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -30, duration: 0.12, ease: 'power2.inOut' },
+        0.06
       );
 
       // Global ScrollTrigger measurement refresh
@@ -113,60 +97,28 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 sm:p-6 md:p-12">
           {/* DYNAMIC SCENE CONTENT */}
 
-          {/* SCENE 4: ATMOSPHERIC TERROIR TRANSITION */}
+          {/* LEFT EDITORIAL PANEL (desktop) */}
           <div
-            ref={scene4Ref}
-            className="will-change-transform mt-8 max-w-xl self-start pointer-events-auto opacity-0"
+            ref={leftPanelRef}
+            className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 max-w-sm flex-col items-start pointer-events-auto will-change-transform"
           >
-            <span className="text-[10px] font-mono tracking-widest uppercase text-mist-blue block mb-1.5 sm:mb-2">
-              04 // NOCTURNAL TERROIR
+            <span className="flex items-center gap-3 text-[11px] font-mono tracking-widest-xl uppercase text-champagne mb-5">
+              <span className="w-10 h-[1.5px] bg-champagne/70" />
+              Perfumers &amp; Perfumery
             </span>
-            <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl text-white font-light mb-3 sm:mb-4">
-              Where Midnight Coastlines Meet Pure Essence
-            </h2>
-            <p className="text-mist-blue/80 text-xs sm:text-sm font-light leading-relaxed mb-4 sm:mb-6">
-              Harvested during dawn's earliest moisture window before solar evaporation dissipates delicate molecular esters. Extracted via cold supercritical CO₂ to preserve botanical truth.
+            <h1 className="font-serif text-5xl lg:text-6xl font-light text-white leading-[1.05] tracking-tight mb-5">
+              ZÄFIZZY
+              <span className="block italic text-champagne text-3xl lg:text-4xl mt-2">Acquire the World</span>
+            </h1>
+            <p className="text-white/70 text-sm font-light leading-relaxed mb-8">
+              Ultra-premium niche perfumery — oud, amber and rare florals, composed with depth, finesse and unmistakable character.
             </p>
-            <div className="flex flex-wrap items-center gap-2 sm:gap-6 text-[10px] sm:text-[11px] font-mono text-mist-blue/70">
-              <div>GRASSE, FRANCE</div>
-              <div className="w-1 h-1 rounded-full bg-mist-blue" />
-              <div>MEDITERRANEAN BASIN</div>
-              <div className="w-1 h-1 rounded-full bg-mist-blue" />
-              <div>100% PURE EXTRACTION</div>
-            </div>
-          </div>
-
-          {/* SCENE 5: THE FINAL HERO MASTERWORK */}
-          <div
-            ref={scene5Ref}
-            className="will-change-transform max-w-xl self-center text-center pointer-events-auto opacity-0 w-full px-2"
-          >
-            <img
-              src={BRAND_IDENTITY.assets.logo}
-              alt="ZÄFIZZY"
-              className="h-9 sm:h-12 mx-auto mb-3 sm:mb-4 object-contain"
-            />
-            <p className="font-serif text-xl sm:text-2xl md:text-3xl text-navy-950 font-normal leading-snug mb-5 sm:mb-6">
-              "To wear ZÄFIZZY is to inhabit a realm where memory, architecture, and noble essence converge."
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
-              <button
-                onClick={onOpenConcierge}
-                className="btn-luxury-shimmer inline-flex items-center justify-center gap-3 bg-navy-900 text-white text-xs uppercase tracking-widest-xl px-8 py-3.5 rounded-sm hover:bg-navy-800 transition-[color,background-color,border-color,box-shadow,opacity,transform] shadow-luxury w-full sm:w-auto"
-              >
-                <span>Inquire Private Atelier</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={onOpenAudit}
-                className="inline-flex items-center justify-center gap-2 border border-navy-900/20 text-navy-900 text-xs uppercase tracking-widest px-6 py-3.5 rounded-sm hover:bg-navy-900/5 transition-colors w-full sm:w-auto"
-              >
-                <ShieldCheck className="w-4 h-4 text-navy-800" />
-                <span>Examine 3D Dossier</span>
-              </button>
-            </div>
+            <a
+              href="#/collection/both"
+              className="btn-luxury-shimmer inline-flex items-center gap-3 bg-white text-navy-950 text-xs uppercase tracking-widest-xl px-7 py-3.5 rounded-sm hover:bg-champagne transition-colors"
+            >
+              Explore the Collection <span aria-hidden="true">→</span>
+            </a>
           </div>
 
           {/* Bottom Navigation Hint */}
