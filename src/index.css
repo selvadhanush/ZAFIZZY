@@ -31,7 +31,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('/assets/BG.png');
+  background-image: url('/assets/BG.webp');
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -98,7 +98,7 @@ body {
 
 /* Brand pattern background utility */
 .bg-brand-pattern {
-  background-image: url('/assets/BG.png');
+  background-image: url('/assets/BG.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -37,7 +37,7 @@ export default function FragranceNotes() {
       ref={sectionRef}
       className="relative py-28 md:py-36 bg-ivory-warm/30 border-t border-b border-navy-900/10 overflow-hidden"
     >
-      {/* Background Floral Pattern Sheen from BG.png */}
+      {/* Background Floral Pattern Sheen from BG.webp */}
       <div
         className="absolute inset-0 bg-brand-pattern opacity-[0.05] pointer-events-none bg-cover bg-center"
         aria-hidden="true"

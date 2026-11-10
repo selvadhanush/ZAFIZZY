@@ -86,7 +86,7 @@ export default function Hero({ onDiscoverClick }) {
         className="absolute top-1/2 left-1/2 w-[700px] lg:w-[1000px] h-[700px] lg:h-[1000px] -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-full bg-radial-lighting blur-3xl animate-ambient-light"
       />
 
-      {/* 2. Delicate Brand Signature Pattern (BG.png) masked into atmosphere */}
+      {/* 2. Delicate Brand Signature Pattern (BG.webp) masked into atmosphere */}
       <div
         className="absolute inset-0 bg-brand-pattern opacity-[0.07] pointer-events-none pattern-mask-subtle bg-cover bg-center"
         aria-hidden="true"

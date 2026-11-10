@@ -86,7 +86,7 @@ export default function BrandPhilosophy() {
       ref={sectionRef}
       className="relative py-14 sm:py-20 md:py-28 bg-ivory-warm/40 overflow-hidden border-t border-b border-navy-900/10"
     >
-      {/* Subtle Pattern Sheet Overlay from BG.png */}
+      {/* Subtle Pattern Sheet Overlay from BG.webp */}
       <div
         className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-center bg-cover"
         aria-hidden="true"

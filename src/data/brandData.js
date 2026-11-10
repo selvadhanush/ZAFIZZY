@@ -13,13 +13,13 @@ export const BRAND_IDENTITY = {
     accentGold: "#CBBBA0",
   },
   assets: {
-    logo: "/assets/ZAFIZZY Logo.psd.png",
-    bismillah: "/assets/bismillah.png",
-    poemForHim: "/assets/poem-for-him.png",
-    poemForHer: "/assets/poem-for-her.png",
-    pattern: "/assets/BG.png",
-    signatureBottle: "/assets/signature-bottle.jpg",
-    fragranceWorld: "/assets/fragrance-world.jpg",
+    logo: "/assets/ZAFIZZY Logo.psd.webp",
+    bismillah: "/assets/bismillah.webp",
+    poemForHim: "/assets/poem-for-him.webp",
+    poemForHer: "/assets/poem-for-her.webp",
+    pattern: "/assets/BG.webp",
+    signatureBottle: "/assets/signature-bottle.webp",
+    fragranceWorld: "/assets/fragrance-world.webp",
   }
 };
 
@@ -155,7 +155,7 @@ export const GAZETTE_POSTS = [
     title: "The Architecture of Cold Extraction",
     excerpt: "How supercritical fluid extraction preserves volatile monoterpenes and delicate esters from wild Mediterranean lavender.",
     date: "OCTOBER 2026",
-    image: "/assets/fragrance-world.jpg"
+    image: "/assets/fragrance-world.webp"
   },
   {
     id: 2,
@@ -164,7 +164,7 @@ export const GAZETTE_POSTS = [
     title: "Glace d'Eau: The Crystal Foundation",
     excerpt: "The physics of crown optical glass (IOR 1.52) and the artisanal hand-beveling required to create the suspended liquid chamber.",
     date: "SEPTEMBER 2026",
-    image: "/assets/signature-bottle.jpg"
+    image: "/assets/signature-bottle.webp"
   },
   {
     id: 3,
@@ -173,7 +173,7 @@ export const GAZETTE_POSTS = [
     title: "The Dawn Dew Window in Grasse",
     excerpt: "Why our blue iris concrete and Provence blossoms are picked solely during the 90 minutes before solar vaporization.",
     date: "AUGUST 2026",
-    image: "/assets/fragrance-world.jpg"
+    image: "/assets/fragrance-world.webp"
   }
 ];
 
@@ -184,7 +184,7 @@ export const PERFUME_EDITIONS = [
     name: "ZÄFIZZY N° 1 — ÉLIXIR IMPÉRIAL",
     subtitle: "The Signature Extrait",
     tag: "SIGNATURE FLACON",
-    image: "/assets/signature-bottle.jpg",
+    image: "/assets/signature-bottle.webp",
     concentration: "28% Extrait de Parfum",
     volume: "100 ML / 3.4 FL. OZ.",
     colorTheme: "Midnight Navy & Crystal",
@@ -203,7 +203,7 @@ export const PERFUME_EDITIONS = [
     name: "ZÄFIZZY N° 2 — NOCTURNE AMBRÉ",
     subtitle: "Aged Bourbon & Smoked Labdanum",
     tag: "HAUTE BOISÉE",
-    image: "/assets/signature-bottle.jpg",
+    image: "/assets/signature-bottle.webp",
     concentration: "30% Extrait de Parfum",
     volume: "100 ML / 3.4 FL. OZ.",
     colorTheme: "Warm Roasted Mahogany",
@@ -222,7 +222,7 @@ export const PERFUME_EDITIONS = [
     name: "ZÄFIZZY N° 3 — CÉLESTE BLANC",
     subtitle: "Crystalline Aldehydes & White Suede",
     tag: "MINERAL FLORAL",
-    image: "/assets/signature-bottle.jpg",
+    image: "/assets/signature-bottle.webp",
     concentration: "26% Extrait de Parfum",
     volume: "100 ML / 3.4 FL. OZ.",
     colorTheme: "Luminous Platinum Silver",
