@@ -67,6 +67,7 @@ export default function App() {
 
       {/* Refined Navigation Bar */}
       <Navbar
+        isHome={!audience}
         onOpenAudit={() => setAuditOpen(true)}
         onOpenConcierge={() => setConciergeOpen(true)}
       />

@@ -63,7 +63,7 @@ export default function PoemDuoComparison({ onOpenConcierge }) {
     position: 'absolute',
     zIndex: 2,
     maxWidth: '30%',
-    fontFamily: '"Cormorant Garamond", Georgia, serif',
+    fontFamily: 'Barlow, Arial, sans-serif',
     fontSize: 'clamp(16px, 2.4cqw, 28px)',
     letterSpacing: '.02em',
     fontStyle: 'italic',

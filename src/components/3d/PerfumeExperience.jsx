@@ -121,8 +121,8 @@ export default function PerfumeExperience({ onOpenAudit, onOpenConcierge }) {
             </a>
           </div>
 
-          {/* Bottom Navigation Hint */}
-          <div className="flex items-center justify-between text-[9px] sm:text-[11px] font-mono opacity-60 text-navy-muted">
+          {/* Scroll hint sits below the transparent navigation */}
+          <div className="mt-20 md:mt-16 flex items-center justify-between text-[9px] sm:text-[11px] font-mono opacity-60 text-navy-muted">
             <span className="hidden md:inline">DESKTOP: POINTER PARALLAX ACTIVE</span>
             <span>CONTINUE SCROLLING FOR BRAND ATELIER & SPECIFICATIONS ↓</span>
           </div>

@@ -36,8 +36,9 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Playfair Display', 'Cinzel', 'serif'],
-        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['Barlow', 'Arial', 'sans-serif'],
+        sans: ['Barlow', 'Arial', 'sans-serif'],
+        mono: ['Barlow', 'Arial', 'sans-serif'],
       },
       letterSpacing: {
         'widest-xl': '0.3em',

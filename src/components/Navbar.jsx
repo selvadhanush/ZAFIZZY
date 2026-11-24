@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, X, ShieldCheck, ChevronDown } from 'lucide-react';
 import { BRAND_IDENTITY } from '../data/brandData';
 
-export default function Navbar({ onOpenAudit, onOpenConcierge }) {
+export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const [collectionOpen, setCollectionOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(() => window.scrollY > 32);
+
+  useEffect(() => {
+    const updateScrolled = () => setScrolled(window.scrollY > 32);
+    window.addEventListener('scroll', updateScrolled, { passive: true });
+    updateScrolled();
+    return () => window.removeEventListener('scroll', updateScrolled);
+  }, []);
+
+  const transparent = isHome && !scrolled && !mobileMenuOpen;
+  const navText = transparent
+    ? 'text-white/85 hover:text-white'
+    : 'text-navy-900/80 hover:text-navy-900';
 
   // Home · Collection (For Him / For Her / For Both) · Contact · About Us
   const navLinks = [
@@ -56,24 +68,26 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
   return (
     <>
       <header
-        className="fixed top-0 left-0 w-full z-50 bg-white border-b border-black/10 py-3 shadow-sm"
+        className={`fixed top-0 left-0 w-full z-50 border-b py-3 transition-[background-color,border-color,box-shadow] duration-300 ${
+          transparent ? 'bg-transparent border-transparent shadow-none' : 'bg-white border-black/10 shadow-sm'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
           {/* Brand Identity / Logo & Calligraphy */}
           <a
             href="#"
-            className="flex flex-col items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-900"
+            className={`flex flex-col items-center group focus:outline-none focus-visible:ring-2 ${transparent ? 'focus-visible:ring-white' : 'focus-visible:ring-navy-900'}`}
             aria-label="ZÄFIZZY Home"
           >
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Perfumers & Perfumery"
-              className="h-8 sm:h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className={`h-8 sm:h-9 md:h-11 w-auto object-contain transition-[filter,transform] duration-300 group-hover:scale-105 ${transparent ? 'brightness-0 invert' : ''}`}
             />
             <img
               src={BRAND_IDENTITY.assets.bismillah}
               alt="Bismillah ir-Rahman ir-Rahim"
-              className="h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+              className={`h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-[filter,opacity] duration-300 group-hover:opacity-100 ${transparent ? 'brightness-0 invert' : ''}`}
             />
           </a>
 
@@ -93,7 +107,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
                     type="button"
                     aria-haspopup="true"
                     aria-expanded={collectionOpen}
-                    className="text-xs uppercase tracking-widest-xl text-navy-900/80 hover:text-navy-900 transition-colors py-1 flex items-center gap-1"
+                    className={`text-xs uppercase tracking-widest-xl transition-colors py-1 flex items-center gap-1 ${navText}`}
                   >
                     <span>{link.label}</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform ${collectionOpen ? 'rotate-180' : ''}`} />
@@ -122,10 +136,10 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
                   key={link.label}
                   href={link.route || link.href || '#'}
                   onClick={(e) => handleNavClick(e, link)}
-                  className="text-xs uppercase tracking-widest-xl text-navy-900/80 hover:text-navy-900 transition-colors relative py-1 group"
+                  className={`text-xs uppercase tracking-widest-xl transition-colors relative py-1 group ${navText}`}
                 >
                   <span>{link.label}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-navy-900 transition-all duration-300 group-hover:w-full" />
+                  <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${transparent ? 'bg-white' : 'bg-navy-900'}`} />
                 </a>
               )
             )}
@@ -135,16 +149,20 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
           <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={onOpenAudit}
-              className="flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-medium text-navy-muted hover:text-navy-900 transition-colors px-3 py-1.5 rounded-full border border-navy-900/15 hover:border-navy-900/40"
+              className={`flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-medium transition-colors px-3 py-1.5 rounded-full border ${
+                transparent ? 'text-white/90 hover:text-white border-white/35 hover:border-white/70' : 'text-navy-muted hover:text-navy-900 border-navy-900/15 hover:border-navy-900/40'
+              }`}
               title="Inspect Brand Identity Assets & 3D Specifications"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-navy-800" />
+              <ShieldCheck className={`w-3.5 h-3.5 ${transparent ? 'text-white' : 'text-navy-800'}`} />
               3D Specs
             </button>
 
             <button
               onClick={onOpenConcierge}
-              className="btn-luxury-shimmer text-xs uppercase tracking-widest-xl font-medium bg-navy-900 text-white px-5 py-2.5 rounded-sm hover:bg-navy-800 transition-colors shadow-sm"
+              className={`btn-luxury-shimmer text-xs uppercase tracking-widest-xl font-medium px-5 py-2.5 rounded-sm transition-colors shadow-sm ${
+                transparent ? 'bg-white text-navy-900 hover:bg-ivory-warm' : 'bg-navy-900 text-white hover:bg-navy-800'
+              }`}
             >
               Private Atelier
             </button>
@@ -153,7 +171,7 @@ export default function Navbar({ onOpenAudit, onOpenConcierge }) {
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-black focus:outline-none"
+            className={`md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 focus:outline-none ${transparent ? 'text-white' : 'text-black'}`}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
           >
