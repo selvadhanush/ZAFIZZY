@@ -1,20 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Menu, X, ShieldCheck, ChevronDown } from 'lucide-react';
 import { BRAND_IDENTITY } from '../data/brandData';
 
 export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(() => window.scrollY > 32);
+  const [heroActive, setHeroActive] = useState(isHome);
 
-  useEffect(() => {
-    const updateScrolled = () => setScrolled(window.scrollY > 32);
-    window.addEventListener('scroll', updateScrolled, { passive: true });
-    updateScrolled();
-    return () => window.removeEventListener('scroll', updateScrolled);
-  }, []);
+  useLayoutEffect(() => {
+    const updateHeroActive = () => {
+      const hero = document.getElementById('experience');
+      // Match the hero ScrollTrigger's end: 'bottom bottom'.
+      setHeroActive(Boolean(isHome && hero && hero.getBoundingClientRect().bottom > window.innerHeight));
+    };
+    window.addEventListener('scroll', updateHeroActive, { passive: true });
+    window.addEventListener('resize', updateHeroActive);
+    updateHeroActive();
+    return () => {
+      window.removeEventListener('scroll', updateHeroActive);
+      window.removeEventListener('resize', updateHeroActive);
+    };
+  }, [isHome]);
 
-  const transparent = isHome && !scrolled && !mobileMenuOpen;
+  const transparent = isHome && heroActive && !mobileMenuOpen;
   const navText = transparent
     ? 'text-white/85 hover:text-white'
     : 'text-navy-900/80 hover:text-navy-900';
@@ -68,7 +76,7 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 border-b py-3 transition-[background-color,border-color,box-shadow] duration-300 ${
+        className={`fixed top-0 left-0 w-full z-50 border-b py-3 ${
           transparent ? 'bg-transparent border-transparent shadow-none' : 'bg-white border-black/10 shadow-sm'
         }`}
       >
@@ -82,12 +90,12 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Perfumers & Perfumery"
-              className={`h-8 sm:h-9 md:h-11 w-auto object-contain transition-[filter,transform] duration-300 group-hover:scale-105 ${transparent ? 'brightness-0 invert' : ''}`}
+              className={`h-8 sm:h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 ${transparent ? 'brightness-0 invert' : ''}`}
             />
             <img
               src={BRAND_IDENTITY.assets.bismillah}
               alt="Bismillah ir-Rahman ir-Rahim"
-              className={`h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-[filter,opacity] duration-300 group-hover:opacity-100 ${transparent ? 'brightness-0 invert' : ''}`}
+              className={`h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-opacity duration-300 group-hover:opacity-100 ${transparent ? 'brightness-0 invert' : ''}`}
             />
           </a>
 
