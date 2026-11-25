@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Menu, X, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Ellipsis, X, ShieldCheck, ChevronDown } from 'lucide-react';
 import { BRAND_IDENTITY } from '../data/brandData';
 
 export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
@@ -176,21 +176,23 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
             </button>
           </div>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Navigation menu */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 focus:outline-none ${transparent ? 'text-white' : 'text-black'}`}
-            aria-label="Toggle navigation menu"
+            className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2 focus:outline-none ${transparent ? 'text-white' : 'text-black'}`}
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
+            aria-controls="navigation-drawer"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Ellipsis className="w-6 h-6" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Navigation drawer */}
       <div
-        className={`fixed inset-0 z-40 bg-navy-950/15 md:hidden transition-opacity duration-300 ${
+        id="navigation-drawer"
+        className={`fixed inset-0 z-40 bg-navy-950/15 transition-opacity duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setMobileMenuOpen(false)}
