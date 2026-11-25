@@ -5,6 +5,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 const VISIBLE_MS = 850;
 const FADE_MS = 250;
 
+function LoadingBar({ className }) {
+  return (
+    <div className={`h-[3px] overflow-hidden rounded-full bg-black/25 ${className}`} aria-hidden="true">
+      <div
+        className="h-full w-full origin-left bg-black"
+        style={{ animation: `preloader-fill ${VISIBLE_MS}ms linear forwards` }}
+      />
+    </div>
+  );
+}
+
 export default function BrandPreloader() {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isDone, setIsDone] = useState(false);
@@ -32,10 +43,19 @@ export default function BrandPreloader() {
       aria-label="Loading ZÄFIZZY Experience"
       role="status"
     >
-      <div className="absolute inset-0 bg-brand-pattern bg-cover bg-center md:hidden" aria-hidden="true" />
-      <div className="absolute inset-0 hidden bg-[url('/assets/loading-desktop.jpg')] bg-contain bg-center bg-no-repeat md:block" aria-hidden="true" />
+      <div className="absolute inset-0 bg-brand-pattern bg-cover bg-center lg:hidden" aria-hidden="true" />
+      <div
+        className="absolute inset-0 hidden bg-[url('/assets/loading-desktop.jpg')] bg-center bg-no-repeat lg:block"
+        style={{ backgroundSize: '100% auto' }}
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto md:hidden">
+      <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 text-navy-950 lg:flex">
+        <span className="text-[10px] font-mono uppercase tracking-[0.3em]">loading...</span>
+        <LoadingBar className="w-64 lg:w-80" />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto lg:hidden">
         <div className="mb-6 sm:mb-8 flex flex-col items-center justify-center">
           <img
             src={BRAND_IDENTITY.assets.logo}
@@ -61,7 +81,7 @@ export default function BrandPreloader() {
           loading...
         </div>
 
-        <div className="h-[3px] w-16 rounded-full bg-black/60 animate-pulse" aria-hidden="true" />
+        <LoadingBar className="w-64 sm:w-80" />
       </div>
     </div>
   );

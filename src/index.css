@@ -25,6 +25,11 @@ body {
   font-family: Barlow, Arial, sans-serif;
 }
 
+@keyframes preloader-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 /* Dedicated hardware-accelerated fixed site background */
 .site-fixed-bg {
   position: fixed;
