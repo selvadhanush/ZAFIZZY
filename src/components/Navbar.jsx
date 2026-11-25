@@ -1,10 +1,9 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Ellipsis, X, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Ellipsis, X, ShieldCheck } from 'lucide-react';
 import { BRAND_IDENTITY } from '../data/brandData';
 
 export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [collectionOpen, setCollectionOpen] = useState(false);
   const [heroActive, setHeroActive] = useState(isHome);
 
   useLayoutEffect(() => {
@@ -23,10 +22,6 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   }, [isHome]);
 
   const transparent = isHome && heroActive && !mobileMenuOpen;
-  const navText = transparent
-    ? 'text-white/85 hover:text-white'
-    : 'text-navy-900/80 hover:text-navy-900';
-
   // Home · Collection (For Him / For Her / For Both) · Contact · About Us
   const navLinks = [
     { label: "Home", href: "#top" },
@@ -45,7 +40,6 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
   const handleNavClick = (e, link) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    setCollectionOpen(false);
     if (link.action === "contact") {
       if (onOpenConcierge) onOpenConcierge();
       return;
@@ -80,106 +74,32 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
           transparent ? 'bg-transparent border-transparent shadow-none' : 'bg-white border-black/10 shadow-sm'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
-          {/* Brand Identity / Logo & Calligraphy */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center">
+          {/* Brand identity */}
           <a
             href="#"
-            className={`flex flex-col items-center group focus:outline-none focus-visible:ring-2 ${transparent ? 'focus-visible:ring-white' : 'focus-visible:ring-navy-900'}`}
+            className={`justify-self-start group focus:outline-none focus-visible:ring-2 ${transparent ? 'focus-visible:ring-white' : 'focus-visible:ring-navy-900'}`}
             aria-label="ZÄFIZZY Home"
           >
             <img
               src={BRAND_IDENTITY.assets.logo}
               alt="ZÄFIZZY Perfumers & Perfumery"
-              className={`h-8 sm:h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 ${transparent ? 'brightness-0 invert' : ''}`}
-            />
-            <img
-              src={BRAND_IDENTITY.assets.bismillah}
-              alt="Bismillah ir-Rahman ir-Rahim"
-              className={`h-2.5 sm:h-3 md:h-3.5 w-auto object-contain mt-1 opacity-90 transition-opacity duration-300 group-hover:opacity-100 ${transparent ? 'brightness-0 invert' : ''}`}
+              className={`h-7 sm:h-9 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 ${transparent ? 'brightness-0 invert' : ''}`}
             />
           </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
-            {navLinks.map((link) =>
-              link.children ? (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={() => setCollectionOpen(true)}
-                  onMouseLeave={() => setCollectionOpen(false)}
-                  onFocus={() => setCollectionOpen(true)}
-                  onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setCollectionOpen(false); }}
-                >
-                  <button
-                    type="button"
-                    aria-haspopup="true"
-                    aria-expanded={collectionOpen}
-                    className={`text-xs uppercase tracking-widest-xl transition-colors py-1 flex items-center gap-1 ${navText}`}
-                  >
-                    <span>{link.label}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${collectionOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  <div
-                    className={`absolute left-1/2 -translate-x-1/2 top-full pt-3 transition-opacity duration-200 ${
-                      collectionOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-                    }`}
-                  >
-                    <div className="min-w-[160px] bg-white/95 border border-navy-900/10 shadow-luxury rounded-sm py-2">
-                      {link.children.map((child) => (
-                        <a
-                          key={child.label}
-                          href={child.route || child.href}
-                          onClick={(e) => handleNavClick(e, child)}
-                          className="block px-5 py-2 text-xs uppercase tracking-widest text-navy-900/80 hover:text-navy-900 hover:bg-navy-900/5 transition-colors"
-                        >
-                          {child.label}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <a
-                  key={link.label}
-                  href={link.route || link.href || '#'}
-                  onClick={(e) => handleNavClick(e, link)}
-                  className={`text-xs uppercase tracking-widest-xl transition-colors relative py-1 group ${navText}`}
-                >
-                  <span>{link.label}</span>
-                  <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${transparent ? 'bg-white' : 'bg-navy-900'}`} />
-                </a>
-              )
-            )}
-          </nav>
-
-          {/* Action CTAs */}
-          <div className="hidden lg:flex items-center gap-4">
-            <button
-              onClick={onOpenAudit}
-              className={`flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-medium transition-colors px-3 py-1.5 rounded-full border ${
-                transparent ? 'text-white/90 hover:text-white border-white/35 hover:border-white/70' : 'text-navy-muted hover:text-navy-900 border-navy-900/15 hover:border-navy-900/40'
-              }`}
-              title="Inspect Brand Identity Assets & 3D Specifications"
-            >
-              <ShieldCheck className={`w-3.5 h-3.5 ${transparent ? 'text-white' : 'text-navy-800'}`} />
-              3D Specs
-            </button>
-
-            <button
-              onClick={onOpenConcierge}
-              className={`btn-luxury-shimmer text-xs uppercase tracking-widest-xl font-medium px-5 py-2.5 rounded-sm transition-colors shadow-sm ${
-                transparent ? 'bg-white text-navy-900 hover:bg-ivory-warm' : 'bg-navy-900 text-white hover:bg-navy-800'
-              }`}
-            >
-              Private Atelier
-            </button>
-          </div>
+          <span
+            lang="ar"
+            dir="rtl"
+            className={`w-[56vw] max-w-[340px] text-center whitespace-nowrap font-[Arial,sans-serif] text-[clamp(16px,4.5vw,36px)] font-extrabold leading-none ${transparent ? 'text-white' : 'text-navy-950'}`}
+          >
+            بسم الله الرحمن الرحيم
+          </span>
 
           {/* Navigation menu */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2 focus:outline-none ${transparent ? 'text-white' : 'text-black'}`}
+            className={`justify-self-end min-h-[44px] min-w-[44px] flex items-center justify-center p-2 focus:outline-none ${transparent ? 'text-white' : 'text-black'}`}
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="navigation-drawer"
@@ -205,16 +125,11 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
         >
           <div>
             <div className="flex items-center justify-between pb-6 border-b border-black/10">
-              <div className="flex flex-col items-start">
+              <div className="flex items-center">
                 <img
                   src={BRAND_IDENTITY.assets.logo}
                   alt="ZÄFIZZY Logo"
                   className="h-8 w-auto object-contain"
-                />
-                <img
-                  src={BRAND_IDENTITY.assets.bismillah}
-                  alt="Bismillah ir-Rahman ir-Rahim"
-                  className="h-2.5 w-auto object-contain mt-1 opacity-90"
                 />
               </div>
               <button
@@ -226,7 +141,7 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
               </button>
             </div>
 
-            <div className="mt-8 flex flex-col gap-6">
+            <nav className="mt-8 flex flex-col gap-6" aria-label="Main navigation">
               {navLinks.map((link) =>
                 link.children ? (
                   <div key={link.label} className="border-b border-black/10">
@@ -257,7 +172,7 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
                   </a>
                 )
               )}
-            </div>
+            </nav>
           </div>
 
           <div className="space-y-3 pt-6 border-t border-black/10">
