@@ -4,9 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 const VISIBLE_MS = 1750;
 const FADE_MS = 250;
 
-function LoadingBar({ className }) {
+function LoadingBar() {
   return (
-    <div className={`h-[3px] overflow-hidden rounded-full bg-black/25 ${className}`} aria-hidden="true">
+    <div className="absolute left-[31.7%] top-[65.5%] lg:left-[43.7%] lg:top-[73%] w-[18%] lg:w-[8%] -translate-x-1/2 h-[3px] overflow-hidden rounded-full bg-black/25" aria-hidden="true">
       <div
         className="h-full w-full origin-left bg-black"
         style={{ animation: `preloader-fill ${VISIBLE_MS}ms linear forwards` }}
@@ -42,15 +42,12 @@ export default function BrandPreloader() {
       aria-label="Loading ZÄFIZZY Experience"
       role="status"
     >
-      <div
-        className="absolute inset-0 bg-[url('/assets/loading-mobile.jpg')] bg-center bg-no-repeat lg:bg-[url('/assets/loading-desktop.jpg')]"
-        style={{ backgroundSize: '100% auto' }}
-        aria-hidden="true"
-      />
-
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3 text-navy-950">
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em]">loading...</span>
-        <LoadingBar className="w-64 sm:w-80" />
+      <div className="absolute left-0 top-1/2 w-full aspect-[899/1599] lg:aspect-video -translate-y-1/2">
+        <picture>
+          <source media="(min-width: 1024px)" srcSet="/assets/loading-desktop.jpg" />
+          <img src="/assets/loading-mobile.jpg" alt="" className="block w-full h-full" aria-hidden="true" />
+        </picture>
+        <LoadingBar />
       </div>
     </div>
   );
