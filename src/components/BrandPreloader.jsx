@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const VISIBLE_MS = 850;
+const VISIBLE_MS = 1100;
 const FADE_MS = 250;
 
 function LoadingBar({ className }) {

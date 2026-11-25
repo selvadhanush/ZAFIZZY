@@ -84,7 +84,7 @@ export default function AboutPage({ onOpenConcierge }) {
           </p>
           <p className="font-serif text-xl sm:text-2xl mb-1">Jinna | Founder</p>
           <p className="text-white/70 text-sm mb-1">ZAFIZZY PERFUMERS &amp; PERFUMERY</p>
-          <p className="font-serif not-italic font-extrabold text-champagne text-lg sm:text-xl mb-8">ACQUIRE THE WORLD.</p>
+          <p className="font-serif not-italic font-extrabold text-white text-lg sm:text-xl mb-8">ACQUIRE THE WORLD.</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
