@@ -6,7 +6,7 @@ const FADE_MS = 250;
 
 function LoadingBar() {
   return (
-    <div className="absolute left-[31.7%] top-[65.5%] lg:left-[43.7%] lg:top-[73%] w-[18%] lg:w-[8%] -translate-x-1/2 h-[3px] overflow-hidden rounded-full bg-black/25" aria-hidden="true">
+    <div className="h-[3px] w-64 sm:w-80 max-w-[80vw] overflow-hidden rounded-full bg-black/25" aria-hidden="true">
       <div
         className="h-full w-full origin-left bg-black"
         style={{ animation: `preloader-fill ${VISIBLE_MS}ms linear forwards` }}
@@ -47,7 +47,10 @@ export default function BrandPreloader() {
           <source media="(min-width: 1024px)" srcSet="/assets/loading-desktop.jpg" />
           <img src="/assets/loading-mobile.jpg" alt="" className="block w-full h-full" aria-hidden="true" />
         </picture>
-        <LoadingBar />
+        <div className="absolute left-1/2 top-[68%] lg:top-[75%] -translate-x-1/2 flex flex-col items-center gap-3 text-navy-950">
+          <span className="text-[10px] font-mono uppercase tracking-[0.3em]">loading...</span>
+          <LoadingBar />
+        </div>
       </div>
     </div>
   );
