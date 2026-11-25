@@ -74,17 +74,17 @@ export default function AboutPage({ onOpenConcierge }) {
           <p>Normally 5 kg per item. Lower quantities may be considered for new starters, subject to feasibility and agreement.</p>
         </Section>
 
-        <section className="bg-navy-950 text-white rounded-sm shadow-luxury p-6 sm:p-10 text-center">
-          <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto mb-6">
+        <section className="bg-navy-950 text-white font-bold rounded-sm shadow-luxury p-6 sm:p-10 text-center">
+          <p className="text-white/80 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto mb-6">
             We are not here merely to manufacture fragrances. We are here to advance the way fragrances are formulated, refined, and developed.
           </p>
           <p dir="rtl" lang="ar" className="text-xl sm:text-2xl mb-3">الحمد لله رب العالمين</p>
-          <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto mb-6">
+          <p className="text-white/80 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto mb-6">
             WITH THE GRACE OF ALLAAH (SWT), our journey continues, <span lang="ar" dir="rtl">إن شاء الله</span>.
           </p>
           <p className="font-serif text-xl sm:text-2xl mb-1">Jinna | Founder</p>
           <p className="text-white/70 text-sm mb-1">ZAFIZZY PERFUMERS &amp; PERFUMERY</p>
-          <p className="font-serif italic text-champagne text-lg sm:text-xl mb-8">ACQUIRE THE WORLD.</p>
+          <p className="font-serif not-italic font-extrabold text-champagne text-lg sm:text-xl mb-8">ACQUIRE THE WORLD.</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a

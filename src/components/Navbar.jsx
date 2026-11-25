@@ -88,13 +88,11 @@ export default function Navbar({ isHome, onOpenAudit, onOpenConcierge }) {
             />
           </a>
 
-          <span
-            lang="ar"
-            dir="rtl"
-            className={`w-[56vw] max-w-[340px] text-center whitespace-nowrap font-[Arial,sans-serif] text-[clamp(16px,4.5vw,36px)] font-extrabold leading-none ${transparent ? 'text-white' : 'text-navy-950'}`}
-          >
-            بسم الله الرحمن الرحيم
-          </span>
+          <img
+            src={BRAND_IDENTITY.assets.bismillah}
+            alt="Bismillah ir-Rahman ir-Rahim"
+            className={`w-[56vw] max-w-[340px] h-auto object-contain ${transparent ? 'brightness-0 invert' : ''}`}
+          />
 
           {/* Navigation menu */}
           <button
