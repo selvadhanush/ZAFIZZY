@@ -39,8 +39,6 @@ export default function App() {
 
   const [auditOpen, setAuditOpen] = useState(false);
   const [conciergeOpen, setConciergeOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
   const handleInspectNotes = () => {
     const el = document.getElementById('experience');
     if (el) {
@@ -52,8 +50,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-navy-900 selection:bg-navy-900 selection:text-white flex flex-col font-sans">
-      {/* Luxury Brand Preloader (matching yusufbhaifragrances.in style) */}
-      <BrandPreloader onLoaded={() => setIsLoaded(true)} />
+      {/* Brief branded splash while the page settles */}
+      <BrandPreloader />
 
       {/* Fixed Site Background (BG.webp) — Stays completely fixed while scrolling */}
       <div

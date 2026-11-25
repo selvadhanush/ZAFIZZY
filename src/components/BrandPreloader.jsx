@@ -2,71 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { BRAND_IDENTITY } from '../data/brandData';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-/**
- * Luxury Brand Preloader
- * Inspired by the reference design from yusufbhaifragrances.in:
- * - Deep luxury midnight-navy atmospheric backdrop
- * - Grand spaced editorial typography (ZÄFIZZY / PERFUMERS & PERFUMERY)
- * - Refined tagline & LOADING... status indicator
- * - Delicate golden progress line that smoothly advances from 0% to 100%
- * - Graceful exit transition revealing the 3D flacon experience
- */
-export default function BrandPreloader({ onLoaded }) {
-  const threeProgress = 0;
-  const [displayProgress, setDisplayProgress] = useState(0);
+const VISIBLE_MS = 850;
+const FADE_MS = 250;
+
+export default function BrandPreloader() {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      // Progressively advance display counter, synchronized with 3D loader
-      const target = Math.max(current + 2, threeProgress || 0);
-      current = Math.min(100, Math.floor(current + (target - current) * 0.16 + 1.2));
-      setDisplayProgress(current);
+    const fadeTimer = window.setTimeout(() => setIsFadingOut(true), VISIBLE_MS);
+    const doneTimer = window.setTimeout(() => {
+      setIsDone(true);
+      ScrollTrigger.refresh();
+    }, VISIBLE_MS + FADE_MS);
 
-      if (current >= 100) {
-        clearInterval(interval);
-        // Hold at 100% briefly for visual elegance, then trigger smooth fade-out
-        setTimeout(() => {
-          setIsFadingOut(true);
-          setTimeout(() => {
-            setIsDone(true);
-            if (onLoaded) onLoaded();
-            ScrollTrigger.refresh();
-          }, 700);
-        }, 280);
-      }
-    }, 25);
-
-    return () => clearInterval(interval);
-  }, [threeProgress, onLoaded]);
+    return () => {
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(doneTimer);
+    };
+  }, []);
 
   if (isDone) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center text-white transition-all duration-800 select-none ${
-        isFadingOut ? 'opacity-0 scale-[1.03] pointer-events-none' : 'opacity-100'
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#f7f6f3] transition-opacity duration-[250ms] select-none ${
+        isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
-      style={{
-        backgroundImage: "url('/assets/BG.webp')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
       aria-label="Loading ZÄFIZZY Experience"
       role="status"
     >
-      {/* Subtle Brand Pattern Sheet Overlay */}
-      <div
-        className="absolute inset-0 bg-brand-pattern opacity-[0.04] pointer-events-none bg-cover bg-center"
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 bg-brand-pattern bg-cover bg-center md:hidden" aria-hidden="true" />
+      <div className="absolute inset-0 hidden bg-[url('/assets/loading-desktop.jpg')] bg-contain bg-center bg-no-repeat md:block" aria-hidden="true" />
 
-      {/* Center Preloader Brand Composition (Matching Reference Layout) */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto">
-        
-        {/* Brand Logo & Calligraphy */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl mx-auto md:hidden">
         <div className="mb-6 sm:mb-8 flex flex-col items-center justify-center">
           <img
             src={BRAND_IDENTITY.assets.logo}
@@ -80,29 +49,19 @@ export default function BrandPreloader({ onLoaded }) {
           />
         </div>
 
-        {/* Subtitle: Fragrances */}
         <div className="text-xs sm:text-sm tracking-[0.3em] uppercase text-black font-sans font-medium mb-2">
           Fragrances
         </div>
 
-        {/* Tagline: Crafting scented stories */}
         <div className="text-[10px] sm:text-xs tracking-[0.22em] text-black/80 font-mono mb-10 sm:mb-12">
           Crafting scented stories
         </div>
 
-        {/* Status: loading (No percentage numbers) */}
         <div className="text-[10px] sm:text-xs tracking-[0.3em] font-mono text-black uppercase mb-3">
           loading...
         </div>
 
-        {/* Elegant Golden Progress Bar */}
-        <div className="relative w-64 sm:w-80 md:w-96 h-[3px] bg-black/25 overflow-hidden rounded-full">
-          <div
-            className="absolute top-0 left-0 h-full bg-black transition-all duration-150 ease-out"
-            style={{ width: `${displayProgress}%` }}
-          />
-        </div>
-
+        <div className="h-[3px] w-16 rounded-full bg-black/60 animate-pulse" aria-hidden="true" />
       </div>
     </div>
   );
